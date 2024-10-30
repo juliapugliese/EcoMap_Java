@@ -5,9 +5,68 @@ CREATE SEQUENCE SEQ_USUARIOS
     NOCYCLE;
 
 CREATE TABLE T_USUARIOS (
-    USUARIO_ID INTEGER DEFAULT SEQ_USUARIOS.NEXTVAL NOT NULL,
+    ID_USUARIO INTEGER DEFAULT SEQ_USUARIOS.NEXTVAL NOT NULL,
     NOME VARCHAR2(100) NOT NULL,
+    CEP VARCHAR(10) NOT NULL,
     EMAIL VARCHAR2(100) UNIQUE NOT NULL,
-    SENHA VARCHAR2(20) NOT NULL,
+    SENHA VARCHAR2(100) NOT NULL,
     ROLE VARCHAR2(50) DEFAULT 'USER'
+);
+
+CREATE TABLE DRONES (
+    ID_DRONE INT PRIMARY KEY,
+    MODELO VARCHAR(150) NOT NULL,
+    STATUS VARCHAR(150) CHECK (status IN ('ativo', 'inativo', 'manutenção')),
+    data_aquisicao DATE
+);
+
+CREATE TABLE RESIDUOS (
+    ID_RESIDUO INT PRIMARY KEY,
+    TIPO_RESIDUO VARCHAR(150) NOT NULL,
+    DESCRICAO VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE SOLICITACOES (
+    ID_SOLICITACAO INT PRIMARY KEY,
+    DESCRICAO VARCHAR(250) NOT NULL,
+    DATA_SOLICITACAO DATE DEFAULT SYSDATE,
+    STATUS VARCHAR(150) CHECK (status IN ('pendente', 'em andamento', 'concluída'))
+);
+
+
+
+CREATE TABLE COLETAS (
+    id_coleta INT PRIMARY KEY,
+    id_area INT NOT NULL,
+    id_residuo INT NOT NULL,
+    data_coleta DATE NOT NULL,
+    quantidade_residuo DECIMAL(10,2), -- quantidade em kg
+    FOREIGN KEY (id_area) REFERENCES area_mapeada(id_area),
+    FOREIGN KEY (id_residuo) REFERENCES residuos(id_residuo)
+);
+
+CREATE TABLE AREA_MAPEADA (
+    ID_AREA INT PRIMARY KEY,
+    NOME_AREA VARCHAR(250) NOT NULL,
+    LATITUDE DECIMAL(9,6) NOT NULL,
+    LONGITUDE DECIMAL(9,6) NOT NULL,
+    ID_DRONE INT NOT NULL,
+    FOREIGN KEY (id_drone) REFERENCES drones(id_drone)
+);
+
+
+CREATE TABLE AREA_SOLICITACAO (
+    id_solicitacao INT,
+    id_area INT,
+    PRIMARY KEY (id_solicitacao, id_area),
+    FOREIGN KEY (id_solicitacao) REFERENCES solicitacao(id_solicitacao),
+    FOREIGN KEY (id_area) REFERENCES area_mapeada(id_area)
+);
+
+
+CREATE TABLE locais_coleta (
+    id_local INT PRIMARY KEY,
+    cep VARCHAR(10) NOT NULL,
+    dia_coleta VARCHAR(50) NOT NULL,
+    tipo_residuo VARCHAR(150) NOT NULL
 );
