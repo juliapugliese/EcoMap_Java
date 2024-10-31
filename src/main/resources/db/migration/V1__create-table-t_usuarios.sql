@@ -1,4 +1,4 @@
-CREATE SEQUENCE SEQ_USUARIOS
+CREATE SEQUENCE SEQ_ID
     START WITH 1
     INCREMENT BY 1
     NOCACHE
@@ -36,11 +36,11 @@ CREATE TABLE SOLICITACOES (
 
 
 CREATE TABLE COLETAS (
-    id_coleta INT PRIMARY KEY,
-    id_area INT NOT NULL,
-    id_residuo INT NOT NULL,
-    data_coleta DATE NOT NULL,
-    quantidade_residuo DECIMAL(10,2), -- quantidade em kg
+    ID_COLETA INT PRIMARY KEY,
+    ID_AREA INT NOT NULL,
+    ID_RESIDUO INT NOT NULL,
+    DATA_COLETA DATE NOT NULL,
+    QUANTIDADE_RESIDUO DECIMAL(10,2), -- quantidade em kg
     FOREIGN KEY (id_area) REFERENCES area_mapeada(id_area),
     FOREIGN KEY (id_residuo) REFERENCES residuos(id_residuo)
 );
@@ -64,9 +64,4 @@ CREATE TABLE AREA_SOLICITACAO (
 );
 
 
-CREATE TABLE locais_coleta (
-    id_local INT PRIMARY KEY,
-    cep VARCHAR(10) NOT NULL,
-    dia_coleta VARCHAR(50) NOT NULL,
-    tipo_residuo VARCHAR(150) NOT NULL
-);
+
