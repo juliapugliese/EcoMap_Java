@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "DRONES")
+@Table(name = "T_DRONES")
 @Getter
 @Setter
 @NoArgsConstructor

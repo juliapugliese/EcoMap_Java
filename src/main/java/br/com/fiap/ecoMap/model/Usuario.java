@@ -9,12 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 
 @Entity
-@Table(name = "t_usuarios")
+@Table(name = "T_USUARIOS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,6 +28,9 @@ public class Usuario extends _BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UsuarioRole role;
+
+    @OneToMany(mappedBy = "denunciante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Denuncia> denuncias = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
