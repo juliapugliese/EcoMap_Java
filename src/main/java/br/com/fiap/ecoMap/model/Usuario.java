@@ -18,21 +18,9 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode
-public class Usuario implements UserDetails {
-    @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "SEQ_USUARIOS"
-    )
-    @SequenceGenerator(
-            name = "SEQ_USUARIOS",
-            sequenceName = "SEQ_USUARIOS",
-            allocationSize = 1
-    )
-    @Column(name = "usuario_id")
-    private Long usuarioId;
-
+@EqualsAndHashCode(callSuper = true)
+@AttributeOverride(name = "id", column = @Column(name = "ID_USUARIO"))
+public class Usuario extends _BaseEntity implements UserDetails {
     private String nome;
     private String email;
     private String senha;
