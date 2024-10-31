@@ -1,6 +1,7 @@
 package br.com.fiap.ecoMap.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,14 +23,21 @@ import java.util.List;
 @AttributeOverride(name = "id", column = @Column(name = "ID_USUARIO"))
 public class Usuario extends _BaseEntity implements UserDetails {
     private String nome;
+    private int cep;
+
+    @Email
     private String email;
+
     private String senha;
 
     @Enumerated(EnumType.STRING)
     private UsuarioRole role;
 
-    @OneToMany(mappedBy = "denunciante", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Denuncia> denuncias = new ArrayList<>();
+
+
+
+    @OneToMany(mappedBy = "denunciante")
+    private List<Denuncia> denuncias;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

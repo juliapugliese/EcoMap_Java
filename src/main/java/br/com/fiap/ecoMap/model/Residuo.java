@@ -15,7 +15,9 @@ import lombok.Setter;
 @AttributeOverride(name = "id", column = @Column(name = "ID_RESIDUO"))
 public class Residuo extends _BaseEntity {
 
+    @Column(name = "TIPO_RESIDUO")
     private String tipo;
+
     private String descricao;
 
     @Transient

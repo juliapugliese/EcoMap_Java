@@ -64,7 +64,7 @@ public class UsuarioService {
 
     public Usuario atualizar(Usuario usuario){
         Optional<Usuario> usuarioOptional =
-                usuarioRepository.findById(usuario.getUsuarioId());
+                usuarioRepository.findById(usuario.getId());
 
         if (usuarioOptional.isPresent()){
             return usuarioRepository.save(usuario);

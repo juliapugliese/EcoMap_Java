@@ -1,11 +1,8 @@
 package br.com.fiap.ecoMap.model;
-
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.StringJoiner;
+
 
 @MappedSuperclass
 @Getter
@@ -14,6 +11,7 @@ import java.util.StringJoiner;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class _BaseEntity {
 
     @Id
@@ -26,6 +24,6 @@ public abstract class _BaseEntity {
             sequenceName = "SEQ_ID",
             allocationSize = 1
     )
-    private int id;
+    private Long id;
 
 }

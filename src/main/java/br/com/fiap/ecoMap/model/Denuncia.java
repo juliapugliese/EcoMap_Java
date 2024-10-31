@@ -17,13 +17,17 @@ import java.time.LocalDate;
 @AttributeOverride(name = "id", column = @Column(name = "ID_SOLICITACAO"))
 public class Denuncia extends _BaseEntity {
 
+    private String descricao;
+
     @Column(name = "DATA_SOLICITACAO")
     private LocalDate dataSolicitacao;
 
     @Enumerated(EnumType.STRING)
     private DenunciaStatus status;
 
-    private String descricao;
+
+
+
 
     @ManyToOne
     @JoinColumn(name = "ID_DENUNCIANTE", referencedColumnName = "ID_USUARIO")
