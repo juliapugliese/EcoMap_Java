@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "ID_RESIDUO"))
 public class Residuo extends _BaseEntity {
 
