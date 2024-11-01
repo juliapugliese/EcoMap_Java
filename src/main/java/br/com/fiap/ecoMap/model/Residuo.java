@@ -20,6 +20,10 @@ public class Residuo extends _BaseEntity {
 
     private String descricao;
 
+    @ManyToOne
+    @JoinColumn(name = "ID_AREA_MAPEADA", referencedColumnName = "ID_AREA")//name = Chave estrangeira na tabela T_RESIDUOS
+    private AreaMapeada areaMapeada;
+
     @Transient
     private Long quantidade;
 }

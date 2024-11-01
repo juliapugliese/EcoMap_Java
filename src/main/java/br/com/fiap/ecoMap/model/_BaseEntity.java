@@ -11,16 +11,16 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public abstract class _BaseEntity {
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "SEQ_ID"
-    )
-    @SequenceGenerator(
-            name = "SEQ_ID",
-            sequenceName = "SEQ_ID",
-            allocationSize = 1
-    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "SEQ_ID"
+//    )
+//    @SequenceGenerator(
+//            name = "SEQ_ID",
+//            sequenceName = "SEQ_ID",
+//            allocationSize = 1
+//    )
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }

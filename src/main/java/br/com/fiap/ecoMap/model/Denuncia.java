@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "T_SOLICITACOES")
@@ -26,8 +27,8 @@ public class Denuncia extends _BaseEntity {
     private DenunciaStatus status;
 
 
-
-
+    @ManyToMany(mappedBy = "denuncias", fetch = FetchType.LAZY)
+    private List<AreaMapeada> areas;
 
     @ManyToOne
     @JoinColumn(name = "ID_DENUNCIANTE", referencedColumnName = "ID_USUARIO")

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "T_DRONES")
@@ -23,4 +24,8 @@ public class Drone extends _BaseEntity {
 
     @Column(name = "DATA_AQUISICAO")
     private LocalDate dataAquisicao;
+
+    @OneToMany(mappedBy = "drone")// Nome do atributo na classe AreaMapeada
+    private List<AreaMapeada> areas;
+
 }
