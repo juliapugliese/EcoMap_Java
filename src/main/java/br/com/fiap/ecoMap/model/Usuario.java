@@ -23,7 +23,7 @@ import java.util.List;
 @AttributeOverride(name = "id", column = @Column(name = "ID_USUARIO"))
 public class Usuario extends _BaseEntity implements UserDetails {
     private String nome;
-    private int cep;
+    private String cep;
 
     @Email
     private String email;
@@ -45,7 +45,6 @@ public class Usuario extends _BaseEntity implements UserDetails {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_USER")
-                    //SimpleGrantedAuthority
             );
         } else {
             return List.of(
