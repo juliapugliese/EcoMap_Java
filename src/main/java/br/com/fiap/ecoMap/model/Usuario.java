@@ -2,10 +2,7 @@ package br.com.fiap.ecoMap.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +13,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "T_USUARIOS")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "ID_USUARIO"))
 public class Usuario extends _BaseEntity implements UserDetails {
