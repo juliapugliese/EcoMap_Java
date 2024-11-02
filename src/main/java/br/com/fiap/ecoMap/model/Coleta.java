@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "T_COLETAS")
@@ -26,16 +25,17 @@ public class Coleta extends _BaseEntity{
 
 
 
-
-    public void recalculateQuantidadeResiduo() {
+//teste
+    public void updateQuantidadeResiduo() {
         if (areas != null && !areas.isEmpty()) {
-            long totalQuantity = areas.stream()
-                    .map(AreaMapeada::getResiduo)
-                    .filter(Objects::nonNull)
-                    .mapToLong(Residuo::getQuantidade)
-                    .sum();
 
-            this.quantidadeResiduo = totalQuantity;
+            this.quantidadeResiduo = areas.stream()
+                    .filter(area -> area.getResiduos() != null)
+                    .mapToLong(area -> area.getResiduos().stream()
+                            .filter(residuo -> residuo != null)
+                            .mapToLong(Residuo::getQuantidade)
+                            .sum())
+                    .sum();
         } else {
             this.quantidadeResiduo = null;
         }

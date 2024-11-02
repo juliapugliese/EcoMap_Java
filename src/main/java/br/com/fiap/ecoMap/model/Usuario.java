@@ -1,5 +1,6 @@
 package br.com.fiap.ecoMap.model;
 
+import br.com.fiap.ecoMap.model.enums.UsuarioRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;

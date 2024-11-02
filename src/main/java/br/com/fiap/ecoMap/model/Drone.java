@@ -1,5 +1,6 @@
 package br.com.fiap.ecoMap.model;
 
+import br.com.fiap.ecoMap.model.enums.DroneStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

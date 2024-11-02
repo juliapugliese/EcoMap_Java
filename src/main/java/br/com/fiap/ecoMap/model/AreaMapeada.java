@@ -15,7 +15,6 @@ import java.util.List;
 @AttributeOverride(name = "id", column = @Column(name = "ID_AREA"))
 public class AreaMapeada extends _BaseEntity {
 
-
     @Column(name = "NOME_AREA", nullable = false)
     private String logradouro;
 

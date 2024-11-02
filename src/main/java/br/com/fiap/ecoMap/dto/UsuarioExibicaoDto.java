@@ -2,7 +2,7 @@ package br.com.fiap.ecoMap.dto;
 
 
 import br.com.fiap.ecoMap.model.Usuario;
-import br.com.fiap.ecoMap.model.UsuarioRole;
+import br.com.fiap.ecoMap.model.enums.UsuarioRole;
 
 public record UsuarioExibicaoDto(
         Long usuarioId,

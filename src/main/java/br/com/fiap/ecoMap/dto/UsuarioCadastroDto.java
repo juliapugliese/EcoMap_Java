@@ -1,6 +1,6 @@
 package br.com.fiap.ecoMap.dto;
 
-import br.com.fiap.ecoMap.model.UsuarioRole;
+import br.com.fiap.ecoMap.model.enums.UsuarioRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

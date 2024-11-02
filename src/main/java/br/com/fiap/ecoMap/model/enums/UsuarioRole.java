@@ -1,4 +1,4 @@
-package br.com.fiap.ecoMap.model;
+package br.com.fiap.ecoMap.model.enums;
 
 public enum UsuarioRole {
     ADMIN("admin"),
