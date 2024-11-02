@@ -28,6 +28,7 @@ public class Usuario extends _BaseEntity implements UserDetails {
     private String senha;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "PAPEL")
     private UsuarioRole role;
 
 
