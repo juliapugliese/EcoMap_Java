@@ -1,19 +1,16 @@
 package br.com.fiap.ecoMap.model;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "T_AREA_MAPEADA")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "ID_AREA"))
 public class AreaMapeada extends _BaseEntity {

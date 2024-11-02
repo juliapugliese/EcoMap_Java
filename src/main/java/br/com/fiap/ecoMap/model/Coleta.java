@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "T_COLETAS")
@@ -22,5 +23,22 @@ public class Coleta extends _BaseEntity{
 
     @OneToMany(mappedBy = "coleta")// Nome do atributo na classe AreaMapeada
     private List<AreaMapeada> areas;
+
+
+
+
+    public void recalculateQuantidadeResiduo() {
+        if (areas != null && !areas.isEmpty()) {
+            long totalQuantity = areas.stream()
+                    .map(AreaMapeada::getResiduo)
+                    .filter(Objects::nonNull)
+                    .mapToLong(Residuo::getQuantidade)
+                    .sum();
+
+            this.quantidadeResiduo = totalQuantity;
+        } else {
+            this.quantidadeResiduo = null;
+        }
+    }
 
 }
