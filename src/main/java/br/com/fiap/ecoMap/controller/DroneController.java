@@ -17,32 +17,32 @@ public class DroneController {
     @Autowired
     private DroneService droneService;
 
-    @PostMapping("/coletas")
+    @PostMapping("/drones")
     @ResponseStatus(HttpStatus.CREATED)
     public DroneExibicaoDto gravar(@RequestBody @Valid DroneCadastroDto droneCadastroDto)
     {
         return droneService.gravar(droneCadastroDto);
     }
 
-    @GetMapping("/coletas")
+    @GetMapping("/drones")
     @ResponseStatus(HttpStatus.OK)
     public Page<DroneExibicaoDto> listarTodosDrones(Pageable paginacao){
         return droneService.listarTodosDrones(paginacao);
     }
 
-    @DeleteMapping("/coletas/{id}")
+    @DeleteMapping("/drones/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long id) {
         droneService.excluir(id);
     }
 
-    @PutMapping("/coletas")
+    @PutMapping("/drones")
     @ResponseStatus(HttpStatus.OK)
     public DroneExibicaoDto atualizar(@RequestBody DroneCadastroDto droneCadastroDto){
         return droneService.atualizar(droneCadastroDto);
     }
 
-    @GetMapping("/coletas/{id}")
+    @GetMapping("/drones/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DroneExibicaoDto buscarPorId(@PathVariable Long id) {
         return droneService.buscarPorId(id);

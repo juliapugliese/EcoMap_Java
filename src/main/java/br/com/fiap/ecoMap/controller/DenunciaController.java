@@ -17,32 +17,32 @@ public class DenunciaController {
     @Autowired
     private DenunciaService denunciaService;
 
-    @PostMapping("/coletas")
+    @PostMapping("/denuncias")
     @ResponseStatus(HttpStatus.CREATED)
     public DenunciaExibicaoDto gravar(@RequestBody @Valid DenunciaCadastroDto denunciaCadastroDto)
     {
         return denunciaService.gravar(denunciaCadastroDto);
     }
 
-    @GetMapping("/coletas")
+    @GetMapping("/denuncias")
     @ResponseStatus(HttpStatus.OK)
     public Page<DenunciaExibicaoDto> listarTodasDenuncias(Pageable paginacao){
         return denunciaService.listarTodasDenuncias(paginacao);
     }
 
-    @DeleteMapping("/coletas/{id}")
+    @DeleteMapping("/denuncias/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long id) {
         denunciaService.excluir(id);
     }
 
-    @PutMapping("/coletas")
+    @PutMapping("/denuncias")
     @ResponseStatus(HttpStatus.OK)
     public DenunciaExibicaoDto atualizar(@RequestBody DenunciaCadastroDto denunciaCadastroDto){
         return denunciaService.atualizar(denunciaCadastroDto);
     }
 
-    @GetMapping("/coletas/{id}")
+    @GetMapping("/denuncias/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DenunciaExibicaoDto buscarPorId(@PathVariable Long id) {
         return denunciaService.buscarPorId(id);

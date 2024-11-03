@@ -16,32 +16,32 @@ public class ResiduoController {
     @Autowired
     private ResiduoService residuoService;
 
-    @PostMapping("/coletas")
+    @PostMapping("/residuos")
     @ResponseStatus(HttpStatus.CREATED)
     public ResiduoExibicaoDto gravar(@RequestBody @Valid ResiduoCadastroDto residuoCadastroDto)
     {
         return residuoService.gravar(residuoCadastroDto);
     }
 
-    @GetMapping("/coletas")
+    @GetMapping("/residuos")
     @ResponseStatus(HttpStatus.OK)
     public Page<ResiduoExibicaoDto> listarTodosResiduos(Pageable paginacao){
         return residuoService.listarTodosResiduos(paginacao);
     }
 
-    @DeleteMapping("/coletas/{id}")
+    @DeleteMapping("/residuos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long id) {
         residuoService.excluir(id);
     }
 
-    @PutMapping("/coletas")
+    @PutMapping("/residuos")
     @ResponseStatus(HttpStatus.OK)
     public ResiduoExibicaoDto atualizar(@RequestBody ResiduoCadastroDto residuoCadastroDto){
         return residuoService.atualizar(residuoCadastroDto);
     }
 
-    @GetMapping("/coletas/{id}")
+    @GetMapping("/residuos/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResiduoExibicaoDto buscarPorId(@PathVariable Long id) {
         return residuoService.buscarPorId(id);
