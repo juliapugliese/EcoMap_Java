@@ -12,6 +12,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -31,7 +33,15 @@ public class DenunciaService {
 
         if (denunciaCadastroDto.idDenunciante() != null) {
             Usuario denunciante = usuarioRepository.findById(denunciaCadastroDto.idDenunciante())
-                    .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
+                    .orElseThrow(() -> new UsuarioNaoEncontradoException("Denunciante não encontrado"));
+            denuncia.setDenunciante(denunciante);
+        } else {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            Usuario denunciante = (Usuario) usuarioRepository.findByEmail(authentication.getName());
+//            denuncia.setDenunciante(denunciante);
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Usuario denunciante = (Usuario) authentication.getPrincipal();
             denuncia.setDenunciante(denunciante);
         }
         return new DenunciaExibicaoDto(denunciaRepository.save(denuncia));
@@ -46,7 +56,7 @@ public class DenunciaService {
         if(denunciaOptional.isPresent()){
             if (denunciaCadastroDto.idDenunciante() != null) {
                 Usuario denunciante = usuarioRepository.findById(denunciaCadastroDto.idDenunciante())
-                        .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
+                        .orElseThrow(() -> new UsuarioNaoEncontradoException("Denunciante não encontrado"));
                 denuncia.setDenunciante(denunciante);
             }
             return new DenunciaExibicaoDto(denunciaRepository.save(denuncia));

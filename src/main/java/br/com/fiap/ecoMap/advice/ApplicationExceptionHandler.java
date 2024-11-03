@@ -34,11 +34,11 @@ public class ApplicationExceptionHandler
         //classe FieldError do spring validation
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public Map<String, String> manusearIntegridadeDosDados(){
-        Map<String, String> mapaErro = new HashMap<>();
-        mapaErro.put("erro", "Usuário já cadastrado");
-        return mapaErro;
-    }
+//    @ResponseStatus(HttpStatus.CONFLICT)
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public Map<String, String> manusearIntegridadeDosDados(){
+//        Map<String, String> mapaErro = new HashMap<>();
+//        mapaErro.put("erro", "Usuário já cadastrado");
+//        return mapaErro;
+//    }
 }
