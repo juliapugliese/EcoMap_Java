@@ -34,11 +34,12 @@ public class Denuncia extends _BaseEntity {
     @JoinColumn(name = "ID_DENUNCIANTE", referencedColumnName = "ID_USUARIO")
     private Usuario denunciante;
 
-    @PostConstruct
-    public void init() {
+    @PrePersist
+    public void prePersist() {
         if (this.dataSolicitacao == null) {
-            this.dataSolicitacao =  LocalDate.now();
-        } else if (this.status == null) {
+            this.dataSolicitacao = LocalDate.now();
+        }
+        if (this.status == null) {
             this.status = DenunciaStatus.PENDENTE;
         }
     }

@@ -29,10 +29,10 @@ public class Drone extends _BaseEntity {
     @OneToMany(mappedBy = "drone")// Nome do atributo na classe AreaMapeada
     private List<AreaMapeada> areas;
 
-    @PostConstruct
-    public void init() {
+    @PrePersist
+    public void prePersist() {
         if (this.status == null) {
-            this.status = DroneStatus.ATIVO;
+            this.status = DroneStatus.ATIVO; // Definindo o status padrão
         }
     }
 

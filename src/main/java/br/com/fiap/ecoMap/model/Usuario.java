@@ -38,8 +38,8 @@ public class Usuario extends _BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "denunciante", fetch = FetchType.EAGER)
     private List<Denuncia> denuncias;
 
-    @PostConstruct
-    public void init() {
+    @PrePersist
+    public void prePersist() {
         if (this.role == null) {
             this.role = UsuarioRole.USER;
         }
