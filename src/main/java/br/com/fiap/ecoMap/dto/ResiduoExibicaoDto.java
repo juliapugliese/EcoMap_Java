@@ -1,5 +1,6 @@
 package br.com.fiap.ecoMap.dto;
 
+import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Residuo;
 
 
@@ -7,14 +8,18 @@ public record ResiduoExibicaoDto(
         Long id,
         String tipo,
         String descricao,
-        Long quantidade
+        Long quantidade,
+
+        AreaMapeada areaMapeada
 ) {
     public ResiduoExibicaoDto(Residuo residuo){
         this(
                 residuo.getId(),
                 residuo.getTipo(),
                 residuo.getDescricao(),
-                residuo.getQuantidade()
+                residuo.getQuantidade(),
+
+                residuo.getAreaMapeada()
         );
     }
 }
