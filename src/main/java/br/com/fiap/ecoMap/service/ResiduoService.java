@@ -47,7 +47,7 @@ public class ResiduoService {
         }
     }
 
-    public Page<ResiduoExibicaoDto> listarTodosContatos(Pageable paginacao)
+    public Page<ResiduoExibicaoDto> listarTodosResiduos(Pageable paginacao)
     {
         return residuoRepository
                 .findAll(paginacao)

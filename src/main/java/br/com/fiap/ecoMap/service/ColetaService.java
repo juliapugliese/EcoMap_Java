@@ -8,8 +8,9 @@ import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.repository.ColetaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,6 +20,12 @@ public class ColetaService {
 
     @Autowired
     private ColetaRepository coletaRepository;
+
+    public ColetaExibicaoDto gravar(ColetaCadastroDto coletaCadastroDto){
+        Coleta coleta = new Coleta();
+        BeanUtils.copyProperties(coletaCadastroDto, coleta);
+        return new ColetaExibicaoDto(coletaRepository.save(coleta));
+    }
 
     public ColetaExibicaoDto buscarPorId(Long id){
         Optional<Coleta> coletaOptional =
@@ -30,6 +37,36 @@ public class ColetaService {
             throw new UsuarioNaoEncontradoException("Coleta não existe no banco de dados!");
         }
     }
+
+    public Page<ColetaExibicaoDto> listarTodasColetas(Pageable paginacao)
+    {
+        return coletaRepository
+                .findAll(paginacao)
+                .map(ColetaExibicaoDto::new);
+    }
+
+    public void excluir(Long id){
+        Optional<Coleta> coletaOptional = coletaRepository.findById(id);
+        if(coletaOptional.isPresent()){
+            coletaRepository.delete(coletaOptional.get());
+        }
+        else {
+            throw new UsuarioNaoEncontradoException("contato não encontrado");
+        }
+    }
+
+    public ColetaExibicaoDto atualizar(ColetaCadastroDto coletaCadastroDto){
+        Coleta coleta = new Coleta();
+        BeanUtils.copyProperties(coletaCadastroDto, coleta);
+        Optional<Coleta> coletaOptional = coletaRepository.findById(coleta.getId());
+        if(coletaOptional.isPresent()){
+            return new ColetaExibicaoDto(coletaRepository.save(coleta));
+        }
+        else {
+            throw new UsuarioNaoEncontradoException("Coleta não encontrado");
+        }
+    }
+
 
     public void atualizarQtResiduo(ColetaCadastroDto coletaDTO){
 

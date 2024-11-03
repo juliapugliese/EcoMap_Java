@@ -68,7 +68,7 @@ public class DenunciaService {
         }
     }
 
-    public Page<DenunciaExibicaoDto> listarTodosContatos(Pageable paginacao)
+    public Page<DenunciaExibicaoDto> listarTodasDenuncias(Pageable paginacao)
     {
         return denunciaRepository
                 .findAll(paginacao)
