@@ -31,4 +31,10 @@ public class Denuncia extends _BaseEntity {
     @ManyToOne
     @JoinColumn(name = "ID_DENUNCIANTE", referencedColumnName = "ID_USUARIO")
     private Usuario denunciante;
+
+    @PrePersist
+    public void prePersist() {
+        this.dataSolicitacao = LocalDate.now();
+        this.status = DenunciaStatus.PENDENTE;
+    }
 }

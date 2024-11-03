@@ -1,5 +1,6 @@
 package br.com.fiap.ecoMap.model;
 
+import br.com.fiap.ecoMap.model.enums.DroneStatus;
 import br.com.fiap.ecoMap.model.enums.UsuarioRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -34,9 +35,13 @@ public class Usuario extends _BaseEntity implements UserDetails {
 
 
 
-
     @OneToMany(mappedBy = "denunciante", fetch = FetchType.EAGER)
     private List<Denuncia> denuncias;
+
+    @PrePersist
+    public void prePersist() {
+        this.role = UsuarioRole.USER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
