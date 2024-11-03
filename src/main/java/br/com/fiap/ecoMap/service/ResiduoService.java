@@ -13,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,7 +43,7 @@ public class ResiduoService {
             return new ResiduoExibicaoDto(residuoOptional.get());
         }
         else {
-            throw new EntityNotFoundException("resíduo não encontrado");
+            throw new EntityNotFoundException("Resíduo não encontrado");
         }
     }
 
@@ -57,12 +55,12 @@ public class ResiduoService {
     }
 
     public void excluir(Long id){
-        Optional<Residuo> contatoOptional = residuoRepository.findById(id);
-        if(contatoOptional.isPresent()){
-            residuoRepository.delete(contatoOptional.get());
+        Optional<Residuo> residuoOptional = residuoRepository.findById(id);
+        if(residuoOptional.isPresent()){
+            residuoRepository.delete(residuoOptional.get());
         }
         else {
-            throw new EntityNotFoundException("resíduo não encontrado");
+            throw new EntityNotFoundException("Resíduo não encontrado");
         }
     }
 
@@ -70,8 +68,8 @@ public class ResiduoService {
         Residuo residuo = new Residuo();
         BeanUtils.copyProperties(residuoCadastroDto, residuo);
 
-        Optional<Residuo> contatoOptional = residuoRepository.findById(residuo.getId());
-        if(contatoOptional.isPresent()){
+        Optional<Residuo> residuoOptional = residuoRepository.findById(residuo.getId());
+        if(residuoOptional.isPresent()){
             if (residuoCadastroDto.idArea() != null) {
                 AreaMapeada area = areaMapeadaRepository.findById(residuoCadastroDto.idArea())
                         .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
@@ -80,7 +78,7 @@ public class ResiduoService {
             return new ResiduoExibicaoDto(residuoRepository.save(residuo));
         }
         else {
-            throw new EntityNotFoundException("resíduo não encontrado");        }
+            throw new EntityNotFoundException("Resíduo não encontrado");        }
     }
 
 }
