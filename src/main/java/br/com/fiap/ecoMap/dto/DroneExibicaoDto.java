@@ -1,7 +1,6 @@
 package br.com.fiap.ecoMap.dto;
 
 import br.com.fiap.ecoMap.model.Drone;
-import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.model.enums.DroneStatus;
 
 import java.time.LocalDate;

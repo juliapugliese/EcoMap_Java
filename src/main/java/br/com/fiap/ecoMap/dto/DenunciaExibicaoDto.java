@@ -1,9 +1,7 @@
 package br.com.fiap.ecoMap.dto;
 
-import br.com.fiap.ecoMap.model.Coleta;
 import br.com.fiap.ecoMap.model.Denuncia;
 import br.com.fiap.ecoMap.model.enums.DenunciaStatus;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 

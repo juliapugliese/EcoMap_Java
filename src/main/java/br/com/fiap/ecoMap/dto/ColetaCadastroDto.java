@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public record ColetaCadastroDto(
         Long id,
 
-
         @NotNull(message = "A quantidade de resíduos é obrigatória")
         Long quantidadeResiduo,
 
