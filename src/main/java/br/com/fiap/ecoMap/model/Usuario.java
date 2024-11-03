@@ -35,7 +35,7 @@ public class Usuario extends _BaseEntity implements UserDetails {
 
 
 
-    @OneToMany(mappedBy = "denunciante")
+    @OneToMany(mappedBy = "denunciante", fetch = FetchType.EAGER)
     private List<Denuncia> denuncias;
 
     @Override
