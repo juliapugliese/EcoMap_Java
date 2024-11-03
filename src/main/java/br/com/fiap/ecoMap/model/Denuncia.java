@@ -1,6 +1,8 @@
 package br.com.fiap.ecoMap.model;
 
 import br.com.fiap.ecoMap.model.enums.DenunciaStatus;
+import br.com.fiap.ecoMap.model.enums.DroneStatus;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,9 +34,13 @@ public class Denuncia extends _BaseEntity {
     @JoinColumn(name = "ID_DENUNCIANTE", referencedColumnName = "ID_USUARIO")
     private Usuario denunciante;
 
-    @PrePersist
-    public void prePersist() {
-        this.dataSolicitacao = LocalDate.now();
-        this.status = DenunciaStatus.PENDENTE;
+    @PostConstruct
+    public void init() {
+        if (this.dataSolicitacao == null) {
+            this.dataSolicitacao =  LocalDate.now();
+        } else if (this.status == null) {
+            this.status = DenunciaStatus.PENDENTE;
+        }
     }
+
 }

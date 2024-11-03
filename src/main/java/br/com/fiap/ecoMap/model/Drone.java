@@ -2,6 +2,8 @@ package br.com.fiap.ecoMap.model;
 
 import br.com.fiap.ecoMap.model.enums.DenunciaStatus;
 import br.com.fiap.ecoMap.model.enums.DroneStatus;
+import br.com.fiap.ecoMap.model.enums.UsuarioRole;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,9 +29,11 @@ public class Drone extends _BaseEntity {
     @OneToMany(mappedBy = "drone")// Nome do atributo na classe AreaMapeada
     private List<AreaMapeada> areas;
 
-    @PrePersist
-    public void prePersist() {
-        this.status = DroneStatus.ATIVO;
+    @PostConstruct
+    public void init() {
+        if (this.status == null) {
+            this.status = DroneStatus.ATIVO;
+        }
     }
 
 }
