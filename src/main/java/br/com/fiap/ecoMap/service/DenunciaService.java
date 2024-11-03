@@ -2,12 +2,8 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.DenunciaCadastroDto;
 import br.com.fiap.ecoMap.dto.DenunciaExibicaoDto;
-import br.com.fiap.ecoMap.dto.ResiduoCadastroDto;
-import br.com.fiap.ecoMap.dto.ResiduoExibicaoDto;
 import br.com.fiap.ecoMap.exception.UsuarioNaoEncontradoException;
-import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Denuncia;
-import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.model.Usuario;
 import br.com.fiap.ecoMap.repository.DenunciaRepository;
 import br.com.fiap.ecoMap.repository.UsuarioRepository;
