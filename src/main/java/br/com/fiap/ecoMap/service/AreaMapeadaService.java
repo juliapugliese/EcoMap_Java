@@ -79,7 +79,7 @@ public class AreaMapeadaService {
         }
     }
 
-    public Page<AreaMapeadaExibicaoDto> listarTodosContatos(Pageable paginacao)
+    public Page<AreaMapeadaExibicaoDto> listarTodasAreas(Pageable paginacao)
     {
         return areaMapeadaRepository
                 .findAll(paginacao)
