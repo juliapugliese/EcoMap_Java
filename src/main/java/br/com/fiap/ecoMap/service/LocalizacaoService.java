@@ -3,6 +3,9 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.LocalizacaoCadastroDto;
 import br.com.fiap.ecoMap.dto.LocalizacaoExibicaoDto;
+import br.com.fiap.ecoMap.exception.AreaNaoEncontradaException;
+import br.com.fiap.ecoMap.exception.ColetaNaoEncontradaException;
+import br.com.fiap.ecoMap.exception.LocalizacaoNaoEncontradaException;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Localizacao;
 import br.com.fiap.ecoMap.repository.*;
@@ -45,7 +48,7 @@ public class LocalizacaoService {
 
             localizacao.setAreaMapeada(areaMapeada);
         } else {
-            throw new EntityNotFoundException ("Bairro não encontrado.");
+            throw new EntityNotFoundException("Bairro não encontrado.");
         }
         // Salva e retorna a localização encontrada / criada
         return new LocalizacaoExibicaoDto(localizacaoRepository.save(localizacao));
@@ -64,14 +67,17 @@ public class LocalizacaoService {
         if(localizacaoOptional.isPresent()){
             if (localizacaoCadastroDto.bairro() != null) {
                 AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(localizacaoCadastroDto.bairro())
-                        .orElseThrow(() -> new EntityNotFoundException("Coleta não encontrada"));
-                localizacao.setAreaMapeada(areaMapeada);
+                        .orElseGet(() -> {
+                            AreaMapeada novaAreaMapeada = new AreaMapeada();
+                            novaAreaMapeada.setBairro(localizacaoCadastroDto.bairro());
+                            return areaMapeadaRepository.save(novaAreaMapeada);
+                        });
 
-            }
-            return new LocalizacaoExibicaoDto(localizacaoRepository.save(localizacao));
+                localizacao.setAreaMapeada(areaMapeada);
+            }return new LocalizacaoExibicaoDto(localizacaoRepository.save(localizacao));
         }
         else {
-            throw new EntityNotFoundException("Área não encontrada");        }
+            throw new LocalizacaoNaoEncontradaException("Localização não encontrada");        }
     }
 
 
@@ -82,7 +88,7 @@ public class LocalizacaoService {
             return new LocalizacaoExibicaoDto(localizacaoOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Localização não encontrada");
+            throw new LocalizacaoNaoEncontradaException("Localização não encontrada");
         }
     }
 
@@ -99,7 +105,7 @@ public class LocalizacaoService {
             localizacaoRepository.delete(localizacaoOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Área não encontrada");
+            throw new LocalizacaoNaoEncontradaException("Localização não encontrada");
         }
     }
 

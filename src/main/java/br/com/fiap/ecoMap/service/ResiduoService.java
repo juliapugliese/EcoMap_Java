@@ -2,6 +2,8 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.ResiduoCadastroDto;
 import br.com.fiap.ecoMap.dto.ResiduoExibicaoDto;
+import br.com.fiap.ecoMap.exception.AreaNaoEncontradaException;
+import br.com.fiap.ecoMap.exception.ResiduoNaoEncontradoException;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Coleta;
 import br.com.fiap.ecoMap.model.Residuo;
@@ -60,7 +62,7 @@ public class ResiduoService {
             return new ResiduoExibicaoDto(residuoOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Resíduo não encontrado");
+            throw new ResiduoNaoEncontradoException("Resíduo não encontrado");
         }
     }
 
@@ -77,7 +79,7 @@ public class ResiduoService {
             residuoRepository.delete(residuoOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Resíduo não encontrado");
+            throw new ResiduoNaoEncontradoException("Resíduo não encontrado");
         }
     }
 
@@ -87,15 +89,24 @@ public class ResiduoService {
 
         Optional<Residuo> residuoOptional = residuoRepository.findById(residuo.getId());
         if(residuoOptional.isPresent()){
-            if (residuoCadastroDto.bairro() != null) {
-                AreaMapeada area = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
-                        .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
-                residuo.setAreaMapeada(area);
+            AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
+                    .orElseGet(() -> {
+                        // Se não encontrar, cria uma nova área mapeada e salva no repositorio
+                        AreaMapeada novaAreaMapeada = new AreaMapeada();
+                        novaAreaMapeada.setBairro(residuoCadastroDto.bairro());
+                        return areaMapeadaRepository.save(novaAreaMapeada);
+                    });
+            Coleta coleta = areaMapeada.getColeta();
+            if (coleta != null) {
+                long coletaQtResiduo = coleta.getQuantidadeResiduo() != null ? coleta.getQuantidadeResiduo() : 0;
+                coleta.setQuantidadeResiduo(coletaQtResiduo += residuo.getQuantidade());
+                coletaRepository.save(coleta);
             }
+            residuo.setAreaMapeada(areaMapeada);
             return new ResiduoExibicaoDto(residuoRepository.save(residuo));
         }
         else {
-            throw new EntityNotFoundException("Resíduo não encontrado");        }
+            throw new ResiduoNaoEncontradoException("Resíduo não encontrado");        }
     }
 
 }

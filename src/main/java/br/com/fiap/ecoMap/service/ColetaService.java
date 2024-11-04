@@ -2,14 +2,14 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.ColetaCadastroDto;
 import br.com.fiap.ecoMap.dto.ColetaExibicaoDto;
+import br.com.fiap.ecoMap.exception.AreaNaoEncontradaException;
+import br.com.fiap.ecoMap.exception.ColetaNaoEncontradaException;
 import br.com.fiap.ecoMap.exception.UsuarioNaoEncontradoException;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Coleta;
 import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.repository.AreaMapeadaRepository;
 import br.com.fiap.ecoMap.repository.ColetaRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ColetaService {
@@ -45,7 +44,7 @@ public class ColetaService {
         if (coletaCadastroDto.idAreas() != null && !coletaCadastroDto.idAreas().isEmpty()) {
             for (Long idArea : coletaCadastroDto.idAreas()) {
                 AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
-                        .orElseThrow(() -> new EntityNotFoundException("Área não cadastrada no sistema"));
+                        .orElseThrow(() -> new AreaNaoEncontradaException("Área não cadastrada no sistema"));
                 areaMapeada.setColeta(coleta);
                 areaMapeadaRepository.save(areaMapeada);
             }
@@ -62,7 +61,7 @@ public class ColetaService {
             System.out.println(coletaOptional.get());
             return new ColetaExibicaoDto(coletaOptional.get());
         } else {
-            throw new UsuarioNaoEncontradoException("Coleta não existe no banco de dados!");
+            throw new ColetaNaoEncontradaException("Coleta não existe no banco de dados!");
         }
     }
 
@@ -79,7 +78,7 @@ public class ColetaService {
             coletaRepository.delete(coletaOptional.get());
         }
         else {
-            throw new UsuarioNaoEncontradoException("contato não encontrado");
+            throw new ColetaNaoEncontradaException("Coleta não encontrado");
         }
     }
 
@@ -88,10 +87,21 @@ public class ColetaService {
         BeanUtils.copyProperties(coletaCadastroDto, coleta);
         Optional<Coleta> coletaOptional = coletaRepository.findById(coleta.getId());
         if(coletaOptional.isPresent()){
-            return new ColetaExibicaoDto(coletaRepository.save(coleta));
+            coleta = coletaRepository.save(coleta);
+
+            if (coletaCadastroDto.idAreas() != null && !coletaCadastroDto.idAreas().isEmpty()) {
+                for (Long idArea : coletaCadastroDto.idAreas()) {
+                    AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
+                            .orElseThrow(() -> new AreaNaoEncontradaException("Área não cadastrada no sistema"));
+                    areaMapeada.setColeta(coleta);
+                    areaMapeadaRepository.save(areaMapeada);
+                }
+            }
+
+            return new ColetaExibicaoDto(coleta);
         }
         else {
-            throw new UsuarioNaoEncontradoException("Coleta não encontrado");
+            throw new ColetaNaoEncontradaException("Coleta não encontrado");
         }
     }
 

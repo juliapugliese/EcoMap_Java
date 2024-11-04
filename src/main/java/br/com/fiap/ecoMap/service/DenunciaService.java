@@ -2,6 +2,7 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.DenunciaCadastroDto;
 import br.com.fiap.ecoMap.dto.DenunciaExibicaoDto;
+import br.com.fiap.ecoMap.exception.DenunciaNaoEncontradaException;
 import br.com.fiap.ecoMap.exception.UsuarioNaoEncontradoException;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Denuncia;
@@ -61,7 +62,7 @@ public class DenunciaService {
             //Inserindo a área mapeada à localização
             localizacaoVerificada.setAreaMapeada(areaMapeada);
         } else {
-            throw new EntityNotFoundException ("Bairro não encontrado.");
+            throw new EntityNotFoundException("Bairro não encontrado.");
         }
         // Salva a localização encontrada / criada
         localizacaoRepository.save(localizacaoVerificada);
@@ -73,10 +74,12 @@ public class DenunciaService {
             Usuario denunciante = usuarioRepository.findById(denunciaCadastroDto.idDenunciante())
                     .orElseThrow(() -> new UsuarioNaoEncontradoException("Denunciante não encontrado"));
             denuncia.setDenunciante(denunciante);
-        } else {
+        } else if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Usuario denunciante = (Usuario) authentication.getPrincipal();
             denuncia.setDenunciante(denunciante);
+        } else {
+            throw new RuntimeException("Usuário não autenticado");
         }
 
         return new DenunciaExibicaoDto(denunciaRepository.save(denuncia));
@@ -96,15 +99,41 @@ public class DenunciaService {
 
         Optional<Denuncia> denunciaOptional = denunciaRepository.findById(denuncia.getId());
         if(denunciaOptional.isPresent()){
+            Localizacao localizacao = new Localizacao();
+            BeanUtils.copyProperties(denunciaCadastroDto.localizacao(), localizacao);
+
+            Localizacao localizacaoVerificada = localizacaoRepository.findByCoordenadas(localizacao.getCoordenadas())
+                    .orElseGet(() -> {
+                        return localizacao;
+                    });
+
+            if (denunciaCadastroDto.localizacao().bairro() != null) {
+                AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(denunciaCadastroDto.localizacao().bairro())
+                        .orElseGet(() -> {
+                            AreaMapeada novaAreaMapeada = new AreaMapeada();
+                            novaAreaMapeada.setBairro(denunciaCadastroDto.localizacao().bairro());
+                            return areaMapeadaRepository.save(novaAreaMapeada);
+                        });
+                localizacaoVerificada.setAreaMapeada(areaMapeada);
+            } else {
+                throw new EntityNotFoundException("Bairro não encontrado.");
+            }
+            localizacaoRepository.save(localizacaoVerificada);
+            denuncia.setLocalizacao(localizacaoVerificada);
+
             if (denunciaCadastroDto.idDenunciante() != null) {
                 Usuario denunciante = usuarioRepository.findById(denunciaCadastroDto.idDenunciante())
                         .orElseThrow(() -> new UsuarioNaoEncontradoException("Denunciante não encontrado"));
+                denuncia.setDenunciante(denunciante);
+            } else{
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                Usuario denunciante = (Usuario) authentication.getPrincipal();
                 denuncia.setDenunciante(denunciante);
             }
             return new DenunciaExibicaoDto(denunciaRepository.save(denuncia));
         }
         else {
-            throw new EntityNotFoundException("Denúncia não encontrada");        }
+            throw new DenunciaNaoEncontradaException("Denúncia não encontrada");        }
     }
 
 
@@ -117,7 +146,7 @@ public class DenunciaService {
             return new DenunciaExibicaoDto(denunciaOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Denúncia não encontrado");
+            throw new DenunciaNaoEncontradaException("Denúncia não encontrado");
         }
     }
 
@@ -134,7 +163,7 @@ public class DenunciaService {
             denunciaRepository.delete(denunciaOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Denúncia não encontrado");
+            throw new DenunciaNaoEncontradaException("Denúncia não encontrado");
         }
     }
 

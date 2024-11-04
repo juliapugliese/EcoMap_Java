@@ -59,7 +59,7 @@ public class UsuarioService {
         if (usuarioOptional.isPresent()){
             usuarioRepository.delete(usuarioOptional.get());
         } else {
-            throw new RuntimeException("Produto não encontrado!");
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado!");
         }
     }
 
@@ -70,7 +70,7 @@ public class UsuarioService {
         if (usuarioOptional.isPresent()){
             return usuarioRepository.save(usuario);
         } else {
-            throw new RuntimeException("Usuário não encontrado!");
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado!");
         }
     }
 

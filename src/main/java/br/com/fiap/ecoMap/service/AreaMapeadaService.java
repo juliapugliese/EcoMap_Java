@@ -2,6 +2,9 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.AreaMapeadaCadastroDto;
 import br.com.fiap.ecoMap.dto.AreaMapeadaExibicaoDto;
+import br.com.fiap.ecoMap.exception.AreaNaoEncontradaException;
+import br.com.fiap.ecoMap.exception.ColetaNaoEncontradaException;
+import br.com.fiap.ecoMap.exception.DroneNaoEncontradoException;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Coleta;
 import br.com.fiap.ecoMap.model.Denuncia;
@@ -42,17 +45,16 @@ public class AreaMapeadaService {
 
         if (areaCadastroDto.idColeta() != null) {
             Coleta coleta = coletaRepository.findById(areaCadastroDto.idColeta())
-                    .orElseThrow(() -> new EntityNotFoundException("Coleta não encontrada"));
+                    .orElseThrow(() -> new ColetaNaoEncontradaException("Coleta não encontrada"));
             areaMapeada.setColeta(coleta);
 
         }if (areaCadastroDto.idDrone() != null) {
             Drone drone = droneRepository.findById(areaCadastroDto.idDrone())
-                    .orElseThrow(() -> new EntityNotFoundException("Drone não encontrada"));
+                    .orElseThrow(() -> new DroneNaoEncontradoException("Drone não encontrada"));
             areaMapeada.setDrone(drone);
         }
-        areaMapeadaRepository.save(areaMapeada);
 
-        return new AreaMapeadaExibicaoDto(areaMapeada);
+        return new AreaMapeadaExibicaoDto(areaMapeadaRepository.save(areaMapeada));
     }
 
 
@@ -64,14 +66,13 @@ public class AreaMapeadaService {
         if(areaOptional.isPresent()){
             if (areaCadastroDto.idColeta() != null) {
                 Coleta coleta = coletaRepository.findById(areaCadastroDto.idColeta())
-                        .orElseThrow(() -> new EntityNotFoundException("Coleta não encontrada"));
+                        .orElseThrow(() -> new ColetaNaoEncontradaException("Coleta não encontrada"));
                 areaMapeada.setColeta(coleta);
 
-            } else if (areaCadastroDto.idDrone() != null) {
+            }if (areaCadastroDto.idDrone() != null) {
                 Drone drone = droneRepository.findById(areaCadastroDto.idDrone())
-                        .orElseThrow(() -> new EntityNotFoundException("Drone não encontrada"));
+                        .orElseThrow(() -> new DroneNaoEncontradoException("Drone não encontrada"));
                 areaMapeada.setDrone(drone);
-
             }
             return new AreaMapeadaExibicaoDto(areaMapeadaRepository.save(areaMapeada));
         }
@@ -87,7 +88,7 @@ public class AreaMapeadaService {
             return new AreaMapeadaExibicaoDto(areaOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Área não encontrada");
+            throw new AreaNaoEncontradaException("Área não encontrada");
         }
     }
 
@@ -104,7 +105,7 @@ public class AreaMapeadaService {
             areaMapeadaRepository.delete(areaOptional.get());
         }
         else {
-            throw new EntityNotFoundException("Área não encontrada");
+            throw new AreaNaoEncontradaException("Área não encontrada");
         }
     }
 
