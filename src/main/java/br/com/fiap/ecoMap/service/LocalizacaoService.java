@@ -28,16 +28,32 @@ public class LocalizacaoService {
         Localizacao localizacao = new Localizacao();
         BeanUtils.copyProperties(localizacaoCadastroDto, localizacao);
 
+        Localizacao localizacaoVerificada = localizacaoRepository.findByCoordenadas(localizacaoCadastroDto.coordenadas())
+                .orElseGet(() -> {
+                    return localizacao;
+                });
+
         if (localizacaoCadastroDto.bairro() != null) {
             AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(localizacaoCadastroDto.bairro())
-                    .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
-            localizacao.setAreaMapeada(areaMapeada);
+                    .orElseGet(() -> {
+                        // Se não encontrar, cria uma nova área mapeada e salva no repositorio
+                        AreaMapeada novaAreaMapeada = new AreaMapeada();
+                        novaAreaMapeada.setBairro(localizacaoCadastroDto.bairro());
+                        return areaMapeadaRepository.save(novaAreaMapeada);
+                    });
 
+            localizacaoVerificada.setAreaMapeada(areaMapeada);
+        } else {
+            throw new EntityNotFoundException ("Bairro não encontrado.");
         }
-        localizacao = localizacaoRepository.save(localizacao);
-
-        return new LocalizacaoExibicaoDto(localizacao);
+        // Salva a localização encontrada / criada
+        localizacaoRepository.save(localizacaoVerificada);
+        return new LocalizacaoExibicaoDto(localizacaoVerificada);
     }
+
+
+
+
 
 
     public LocalizacaoExibicaoDto atualizar(LocalizacaoCadastroDto localizacaoCadastroDto){

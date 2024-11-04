@@ -30,8 +30,15 @@ public class AreaMapeadaService {
     private DenunciaRepository denunciaRepository;
 
     public AreaMapeadaExibicaoDto gravar(AreaMapeadaCadastroDto areaCadastroDto) {
-        AreaMapeada areaMapeada = new AreaMapeada();
-        BeanUtils.copyProperties(areaCadastroDto, areaMapeada);
+        Optional<AreaMapeada> existingAreaOptional = areaMapeadaRepository.findByBairro(areaCadastroDto.bairro());
+
+        AreaMapeada areaMapeada;
+        if (existingAreaOptional.isPresent()) {
+            areaMapeada = existingAreaOptional.get();
+        } else {
+            areaMapeada = new AreaMapeada();
+            BeanUtils.copyProperties(areaCadastroDto, areaMapeada);
+        }
 
         if (areaCadastroDto.idColeta() != null) {
             Coleta coleta = coletaRepository.findById(areaCadastroDto.idColeta())
@@ -43,25 +50,7 @@ public class AreaMapeadaService {
                     .orElseThrow(() -> new EntityNotFoundException("Drone não encontrada"));
             areaMapeada.setDrone(drone);
         }
-        areaMapeada = areaMapeadaRepository.save(areaMapeada);
-
-
-
-
-//        if (areaCadastroDto.idDenuncia() != null) {
-//            Optional<Denuncia> denunciaOptional = denunciaRepository.findById(areaCadastroDto.idDenuncia());
-//            if (denunciaOptional.isPresent()) {
-//                Denuncia denuncia = denunciaOptional.get();
-//
-//                // Cria a nova AreaSolicitacao
-//                AreaMapeada areaSolicitacao = new AreaMapeada();
-//
-//                // Salva a AreaSolicitacao no repositório
-//                areaMapeadaRepository.save(areaSolicitacao);
-//            } else {
-//                throw new EntityNotFoundException("Denúncia não encontrada");
-//            }
-//        }
+        areaMapeadaRepository.save(areaMapeada);
 
         return new AreaMapeadaExibicaoDto(areaMapeada);
     }

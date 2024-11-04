@@ -1,12 +1,11 @@
 package br.com.fiap.ecoMap.dto;
 
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record AreaMapeadaCadastroDto(
         Long id,
 
-        @NotBlank(message = "O bairro é obrigatório!")
+        @NotNull(message = "O bairro é obrigatório!")
         String bairro,
 
         Long idDrone,
