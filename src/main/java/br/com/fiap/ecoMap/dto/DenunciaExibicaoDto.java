@@ -2,7 +2,6 @@ package br.com.fiap.ecoMap.dto;
 
 import br.com.fiap.ecoMap.model.Denuncia;
 import br.com.fiap.ecoMap.model.enums.DenunciaStatus;
-
 import java.time.LocalDate;
 
 public record DenunciaExibicaoDto(

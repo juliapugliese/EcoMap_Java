@@ -1,17 +1,16 @@
 package br.com.fiap.ecoMap.dto;
 
 import br.com.fiap.ecoMap.model.*;
-
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record AreaMapeadaExibicaoDto(
         Long id,
         String bairro,
 
-        Coleta coleta,
-        Drone drone,
-        List<Residuo> residuos
+        ColetaExibicaoDto coleta,
+        DroneExibicaoDto drone,
+        List<ResiduoExibicaoDto> residuos
 
 ) {
     public AreaMapeadaExibicaoDto(AreaMapeada areaMapeada){
@@ -19,9 +18,12 @@ public record AreaMapeadaExibicaoDto(
                 areaMapeada.getId(),
                 areaMapeada.getBairro(),
 
-                areaMapeada.getColeta(),
-                areaMapeada.getDrone(),
-                areaMapeada.getResiduos()
+                areaMapeada.getColeta()!= null ? new ColetaExibicaoDto(areaMapeada.getColeta()) : null,
+                areaMapeada.getDrone()!= null ? new DroneExibicaoDto(areaMapeada.getDrone()) : null,
+                areaMapeada.getResiduos() == null || areaMapeada.getResiduos().isEmpty() ? null :
+                        areaMapeada.getResiduos().stream()
+                        .map(ResiduoExibicaoDto::new)
+                        .collect(Collectors.toList())
         );
     }
 

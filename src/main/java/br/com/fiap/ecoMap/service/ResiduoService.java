@@ -3,8 +3,10 @@ package br.com.fiap.ecoMap.service;
 import br.com.fiap.ecoMap.dto.ResiduoCadastroDto;
 import br.com.fiap.ecoMap.dto.ResiduoExibicaoDto;
 import br.com.fiap.ecoMap.model.AreaMapeada;
+import br.com.fiap.ecoMap.model.Coleta;
 import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.repository.AreaMapeadaRepository;
+import br.com.fiap.ecoMap.repository.ColetaRepository;
 import br.com.fiap.ecoMap.repository.ResiduoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +25,8 @@ public class ResiduoService {
     @Autowired
     private AreaMapeadaRepository areaMapeadaRepository;
 
+    @Autowired
+    private ColetaRepository coletaRepository;
 
     public ResiduoExibicaoDto gravar(ResiduoCadastroDto residuoCadastroDto) {
         Residuo residuo = new Residuo();
@@ -32,7 +36,16 @@ public class ResiduoService {
             AreaMapeada area = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
                     .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
             residuo.setAreaMapeada(area);
+
+            Coleta coleta = area.getColeta();
+            if (coleta != null) {
+                coleta.setQuantidadeResiduo(coleta.getQuantidadeResiduo() + residuo.getQuantidade());
+                coletaRepository.save(coleta);
+            } else {
+                throw new EntityNotFoundException("Coleta não encontrada");
+            }
         }
+
         return new ResiduoExibicaoDto(residuoRepository.save(residuo));
     }
 

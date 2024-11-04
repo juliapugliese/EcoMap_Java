@@ -1,10 +1,9 @@
 package br.com.fiap.ecoMap.dto;
 
-import br.com.fiap.ecoMap.model.Denuncia;
 import br.com.fiap.ecoMap.model.Usuario;
 import br.com.fiap.ecoMap.model.enums.UsuarioRole;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record UsuarioExibicaoDto(
         Long usuarioId,
@@ -12,7 +11,7 @@ public record UsuarioExibicaoDto(
         String email,
         UsuarioRole role,
 
-        List<Denuncia> denuncias
+        List<DenunciaExibicaoDto> denuncias
 ) {
     public UsuarioExibicaoDto(Usuario usuario) {
         this(
@@ -21,7 +20,10 @@ public record UsuarioExibicaoDto(
                 usuario.getEmail(),
                 usuario.getRole(),
 
-                usuario.getDenuncias()
+                usuario.getDenuncias() == null || usuario.getDenuncias().isEmpty() ? null :
+                        usuario.getDenuncias().stream()
+                                .map(DenunciaExibicaoDto::new)
+                                .collect(Collectors.toList())
         );
     }
 }

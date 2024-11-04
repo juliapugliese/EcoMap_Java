@@ -1,6 +1,5 @@
 package br.com.fiap.ecoMap.dto;
 
-import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Localizacao;
 
 public record LocalizacaoExibicaoDto(
@@ -9,7 +8,7 @@ public record LocalizacaoExibicaoDto(
         String cep,
         String coordenadas,
 
-        AreaMapeada area
+        AreaMapeadaExibicaoDto area
 ) {
     public LocalizacaoExibicaoDto(Localizacao localizacao){
         this(
@@ -18,7 +17,7 @@ public record LocalizacaoExibicaoDto(
                 localizacao.getCep(),
                 localizacao.getCoordenadas(),
 
-                localizacao.getAreaMapeada()
+                localizacao.getAreaMapeada()!= null ? new AreaMapeadaExibicaoDto(localizacao.getAreaMapeada()) : null
         );
     }
 }
