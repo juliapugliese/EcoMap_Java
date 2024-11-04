@@ -20,25 +20,25 @@ public class Coleta extends _BaseEntity{
     @Column(name = "DATA_COLETA")
     private LocalDate dataColeta;
 
-    @OneToMany(mappedBy = "coleta")// Nome do atributo na classe AreaMapeada
+    @OneToMany(mappedBy = "coleta", fetch = FetchType.EAGER)// Nome do atributo na classe AreaMapeada
     private List<AreaMapeada> areas;
 
 
 
 //teste
-    public void updateQuantidadeResiduo() {
-        if (areas != null && !areas.isEmpty()) {
-
-            this.quantidadeResiduo = areas.stream()
-                    .filter(area -> area.getResiduos() != null)
-                    .mapToLong(area -> area.getResiduos().stream()
-                            .filter(residuo -> residuo != null)
-                            .mapToLong(Residuo::getQuantidade)
-                            .sum())
-                    .sum();
-        } else {
-            this.quantidadeResiduo = null;
-        }
-    }
+//    public void updateQuantidadeResiduo() {
+//        if (areas != null && !areas.isEmpty()) {
+//
+//            this.quantidadeResiduo = areas.stream()
+//                    .filter(area -> area.getResiduos() != null)
+//                    .mapToLong(area -> area.getResiduos().stream()
+//                            .filter(residuo -> residuo != null)
+//                            .mapToLong(Residuo::getQuantidade)
+//                            .sum())
+//                    .sum();
+//        } else {
+//            this.quantidadeResiduo = null;
+//        }
+//    }
 
 }

@@ -3,14 +3,19 @@ package br.com.fiap.ecoMap.service;
 import br.com.fiap.ecoMap.dto.DroneCadastroDto;
 import br.com.fiap.ecoMap.dto.DroneExibicaoDto;
 import br.com.fiap.ecoMap.exception.UsuarioNaoEncontradoException;
+import br.com.fiap.ecoMap.model.AreaMapeada;
+import br.com.fiap.ecoMap.model.Coleta;
 import br.com.fiap.ecoMap.model.Drone;
+import br.com.fiap.ecoMap.repository.AreaMapeadaRepository;
 import br.com.fiap.ecoMap.repository.DroneRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,10 +23,29 @@ public class DroneService {
     @Autowired
     private DroneRepository droneRepository;
 
+    @Autowired
+    private AreaMapeadaRepository areaMapeadaRepository;
+
     public DroneExibicaoDto gravar(DroneCadastroDto droneCadastroDto){
-        Drone drone = new Drone();
-        BeanUtils.copyProperties(droneCadastroDto, drone);
-        return new DroneExibicaoDto(droneRepository.save(drone));
+        List<Drone> dronesExistentes = droneRepository.findByIdAreas(droneCadastroDto.idAreas());
+        Drone drone;
+        if (!dronesExistentes.isEmpty() && dronesExistentes.getFirst().getModelo().equals(droneCadastroDto.modelo())) {
+            drone = dronesExistentes.getFirst();
+        } else {
+            drone = new Drone();
+            BeanUtils.copyProperties(droneCadastroDto, drone);
+            drone = droneRepository.save(drone);
+        }
+
+        if (droneCadastroDto.idAreas() != null && !droneCadastroDto.idAreas().isEmpty()) {
+            for (Long idArea : droneCadastroDto.idAreas()) {
+                AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
+                        .orElseThrow(() -> new EntityNotFoundException("Área não cadastrada no sistema"));
+                areaMapeada.setDrone(drone);
+                areaMapeadaRepository.save(areaMapeada);
+            }
+        }
+        return new DroneExibicaoDto(drone);
     }
 
     public DroneExibicaoDto buscarPorId(Long id){
