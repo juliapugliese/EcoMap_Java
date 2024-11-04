@@ -41,44 +41,37 @@ public class DenunciaService {
         BeanUtils.copyProperties(denunciaCadastroDto, denuncia);
 
         if (denunciaCadastroDto.localizacao() != null) {
-            System.out.println("LocalizacaoCadastroDto: " + denunciaCadastroDto.localizacao());
             Localizacao localizacao = new Localizacao();
             BeanUtils.copyProperties(denunciaCadastroDto.localizacao(), localizacao);
 
-            // Verifica se o bairro está preenchido
+            Localizacao localizacaoVerificada = localizacaoRepository.findByCoordenadas(localizacao.getCoordenadas())
+                    .orElseGet(() -> {
+                        // Se não encontrar, salva a nova localização no repositorio
+                        return localizacao;
+                    });
+
             if (denunciaCadastroDto.localizacao().bairro() != null) {
-                // Tenta encontrar a área mapeada pelo bairro
                 AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(denunciaCadastroDto.localizacao().bairro())
                         .orElseGet(() -> {
                             // Se não encontrar, cria uma nova área mapeada
                             AreaMapeada novaAreaMapeada = new AreaMapeada();
                             novaAreaMapeada.setBairro(denunciaCadastroDto.localizacao().bairro());
-                            // Aqui você pode definir outros campos da nova área mapeada, se necessário
                             return areaMapeadaRepository.save(novaAreaMapeada);
                         });
 
-                // Associa a área mapeada à localização
-                localizacao.setAreaMapeada(areaMapeada);
-                System.out.println("Área encontrada ou criada: " + areaMapeada.getBairro());
+                //Inserindo a área mapeada à localização
+                localizacaoVerificada.setAreaMapeada(areaMapeada);
             } else {
-                System.out.println("Bairro não preenchido no localizacao.");
+                throw new EntityNotFoundException ("Bairro não encontrado.");
             }
-
-            // Salva a localização e associa à denúncia
-            Localizacao savedArea = localizacaoRepository.save(localizacao);
-            if (savedArea.getId() != null) {
-                System.out.println("Localização salva com ID: " + savedArea.getId());
-                denuncia.setLocalizacao(savedArea);
-            } else {
-                System.out.println("Falha ao salvar a localização.");
-                throw new EntityNotFoundException("Localização não foi salva corretamente.");
-            }
+            // Setar a localização encontrada / criada
+            localizacaoRepository.save(localizacaoVerificada);
+            denuncia.setLocalizacao(localizacaoVerificada);
         } else {
-            System.out.println("localizacao é nulo.");
             throw new EntityNotFoundException("Localização não fornecida.");
         }
 
-        // Verifica se o id do denunciante está preenchido
+        // Verifica o denunciante
         if (denunciaCadastroDto.idDenunciante() != null) {
             Usuario denunciante = usuarioRepository.findById(denunciaCadastroDto.idDenunciante())
                     .orElseThrow(() -> new UsuarioNaoEncontradoException("Denunciante não encontrado"));
@@ -89,7 +82,6 @@ public class DenunciaService {
             denuncia.setDenunciante(denunciante);
         }
 
-        // Salva a denúncia e retorna o DTO
         return new DenunciaExibicaoDto(denunciaRepository.save(denuncia));
     }
 

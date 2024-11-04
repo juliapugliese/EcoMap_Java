@@ -1,6 +1,7 @@
 package br.com.fiap.ecoMap.dto;
 
 import br.com.fiap.ecoMap.model.enums.DenunciaStatus;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -17,8 +18,8 @@ public record DenunciaCadastroDto(
 
         Long idDenunciante,
 
-//        @Valid
-//        @NotEmpty(message = "A denúncia deve estar vinculada a uma localização!")
+        @Valid
+        @NotNull(message = "A denúncia deve estar vinculada a uma localização!")
         LocalizacaoCadastroDto localizacao
 
 //        @NotBlank(message = "A denúncia deve estar vinculada a uma área")
