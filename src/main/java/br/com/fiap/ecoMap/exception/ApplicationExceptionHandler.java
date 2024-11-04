@@ -1,6 +1,5 @@
-package br.com.fiap.ecoMap.advice;
+package br.com.fiap.ecoMap.exception;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

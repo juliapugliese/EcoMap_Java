@@ -7,26 +7,21 @@ import java.util.List;
 
 public record AreaMapeadaExibicaoDto(
         Long id,
-        String logradouro,
-        Double latitude,
-        Double longitude,
+        String bairro,
 
         Coleta coleta,
         Drone drone,
-        List<Residuo> residuos,
-        Collection<Denuncia> denuncias
+        List<Residuo> residuos
+
 ) {
     public AreaMapeadaExibicaoDto(AreaMapeada areaMapeada){
         this(
                 areaMapeada.getId(),
-                areaMapeada.getLogradouro(),
-                areaMapeada.getLatitude(),
-                areaMapeada.getLongitude(),
+                areaMapeada.getBairro(),
 
                 areaMapeada.getColeta(),
                 areaMapeada.getDrone(),
-                areaMapeada.getResiduos(),
-                areaMapeada.getDenuncias()
+                areaMapeada.getResiduos()
         );
     }
 

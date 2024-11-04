@@ -15,6 +15,13 @@ public record DenunciaCadastroDto(
 
         DenunciaStatus status,
 
-        Long idDenunciante
+        Long idDenunciante,
+
+//        @Valid
+//        @NotEmpty(message = "A denúncia deve estar vinculada a uma localização!")
+        LocalizacaoCadastroDto localizacao
+
+//        @NotBlank(message = "A denúncia deve estar vinculada a uma área")
+//        String coordenadasArea
 ) {
 }

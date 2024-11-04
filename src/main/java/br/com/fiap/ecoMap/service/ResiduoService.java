@@ -28,8 +28,8 @@ public class ResiduoService {
         Residuo residuo = new Residuo();
         BeanUtils.copyProperties(residuoCadastroDto, residuo);
 
-        if (residuoCadastroDto.idArea() != null) {
-            AreaMapeada area = areaMapeadaRepository.findById(residuoCadastroDto.idArea())
+        if (residuoCadastroDto.bairro() != null) {
+            AreaMapeada area = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
                     .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
             residuo.setAreaMapeada(area);
         }
@@ -70,8 +70,8 @@ public class ResiduoService {
 
         Optional<Residuo> residuoOptional = residuoRepository.findById(residuo.getId());
         if(residuoOptional.isPresent()){
-            if (residuoCadastroDto.idArea() != null) {
-                AreaMapeada area = areaMapeadaRepository.findById(residuoCadastroDto.idArea())
+            if (residuoCadastroDto.bairro() != null) {
+                AreaMapeada area = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
                         .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
                 residuo.setAreaMapeada(area);
             }

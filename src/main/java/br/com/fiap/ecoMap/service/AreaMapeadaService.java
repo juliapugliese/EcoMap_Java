@@ -4,6 +4,7 @@ import br.com.fiap.ecoMap.dto.AreaMapeadaCadastroDto;
 import br.com.fiap.ecoMap.dto.AreaMapeadaExibicaoDto;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Coleta;
+import br.com.fiap.ecoMap.model.Denuncia;
 import br.com.fiap.ecoMap.model.Drone;
 import br.com.fiap.ecoMap.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +26,9 @@ public class AreaMapeadaService {
     @Autowired
     private ColetaRepository coletaRepository;
 
+    @Autowired
+    private DenunciaRepository denunciaRepository;
+
     public AreaMapeadaExibicaoDto gravar(AreaMapeadaCadastroDto areaCadastroDto) {
         AreaMapeada areaMapeada = new AreaMapeada();
         BeanUtils.copyProperties(areaCadastroDto, areaMapeada);
@@ -34,14 +38,34 @@ public class AreaMapeadaService {
                     .orElseThrow(() -> new EntityNotFoundException("Coleta não encontrada"));
             areaMapeada.setColeta(coleta);
 
-        } else if (areaCadastroDto.idDrone() != null) {
+        }if (areaCadastroDto.idDrone() != null) {
             Drone drone = droneRepository.findById(areaCadastroDto.idDrone())
                     .orElseThrow(() -> new EntityNotFoundException("Drone não encontrada"));
             areaMapeada.setDrone(drone);
-
         }
-        return new AreaMapeadaExibicaoDto(areaMapeadaRepository.save(areaMapeada));
+        areaMapeada = areaMapeadaRepository.save(areaMapeada);
+
+
+
+
+//        if (areaCadastroDto.idDenuncia() != null) {
+//            Optional<Denuncia> denunciaOptional = denunciaRepository.findById(areaCadastroDto.idDenuncia());
+//            if (denunciaOptional.isPresent()) {
+//                Denuncia denuncia = denunciaOptional.get();
+//
+//                // Cria a nova AreaSolicitacao
+//                AreaMapeada areaSolicitacao = new AreaMapeada();
+//
+//                // Salva a AreaSolicitacao no repositório
+//                areaMapeadaRepository.save(areaSolicitacao);
+//            } else {
+//                throw new EntityNotFoundException("Denúncia não encontrada");
+//            }
+//        }
+
+        return new AreaMapeadaExibicaoDto(areaMapeada);
     }
+
 
     public AreaMapeadaExibicaoDto atualizar(AreaMapeadaCadastroDto areaCadastroDto){
         AreaMapeada areaMapeada = new AreaMapeada();
@@ -65,8 +89,6 @@ public class AreaMapeadaService {
         else {
             throw new EntityNotFoundException("Área não encontrada");        }
     }
-
-
 
 
     public AreaMapeadaExibicaoDto buscarPorId(Long id){

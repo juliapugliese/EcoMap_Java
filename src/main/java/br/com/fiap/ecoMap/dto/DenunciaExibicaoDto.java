@@ -1,12 +1,9 @@
 package br.com.fiap.ecoMap.dto;
 
-import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Denuncia;
-import br.com.fiap.ecoMap.model.Usuario;
 import br.com.fiap.ecoMap.model.enums.DenunciaStatus;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public record DenunciaExibicaoDto(
         Long id,
@@ -14,8 +11,8 @@ public record DenunciaExibicaoDto(
         LocalDate dataSolicitacao,
         DenunciaStatus status,
 
-        List<AreaMapeada> areas,
-        Usuario denunciante
+        LocalizacaoExibicaoDto localizacao,
+        UsuarioExibicaoDto denunciante
 ) {
     public DenunciaExibicaoDto(Denuncia denuncia){
         this(
@@ -24,8 +21,8 @@ public record DenunciaExibicaoDto(
                 denuncia.getDataSolicitacao(),
                 denuncia.getStatus(),
 
-                denuncia.getAreas(),
-                denuncia.getDenunciante()
+                denuncia.getLocalizacao()!= null ? new LocalizacaoExibicaoDto(denuncia.getLocalizacao()) : null,
+                denuncia.getDenunciante() != null ? new UsuarioExibicaoDto(denuncia.getDenunciante()) : null
         );
     }
 }

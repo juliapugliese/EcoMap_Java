@@ -30,7 +30,7 @@ public class Usuario extends _BaseEntity implements UserDetails {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "PAPEL")
+    @Column(name = "TIPO")
     private UsuarioRole role;
 
 

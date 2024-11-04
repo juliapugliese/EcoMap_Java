@@ -15,13 +15,12 @@ public class Residuo extends _BaseEntity {
     @Column(name = "TIPO_RESIDUO")
     private String tipo;
 
-    private String descricao;
 
     @Column(name = "QUANTIDADE")
     private Long quantidade;
 
     @ManyToOne
-    @JoinColumn(name = "ID_AREA_MAPEADA", referencedColumnName = "ID_AREA")//name = Chave estrangeira na tabela T_RESIDUOS
+    @JoinColumn(name = "ID_AREA", referencedColumnName = "ID_AREA")//name = Chave estrangeira na tabela T_RESIDUOS
     private AreaMapeada areaMapeada;
 
 }

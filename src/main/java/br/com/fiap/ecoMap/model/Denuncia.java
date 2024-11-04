@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "T_SOLICITACOES")
@@ -24,13 +23,14 @@ public class Denuncia extends _BaseEntity {
     @Enumerated(EnumType.STRING)
     private DenunciaStatus status;
 
-
-    @ManyToMany(mappedBy = "denuncias", fetch = FetchType.LAZY)
-    private List<AreaMapeada> areas;
-
     @ManyToOne
     @JoinColumn(name = "ID_DENUNCIANTE", referencedColumnName = "ID_USUARIO")
     private Usuario denunciante;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_LOCALIZACAO", referencedColumnName = "ID_LOCALIZACAO")
+    private Localizacao localizacao;
+
 
     @PrePersist
     public void prePersist() {
