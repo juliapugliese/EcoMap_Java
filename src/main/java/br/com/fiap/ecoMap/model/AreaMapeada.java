@@ -29,7 +29,7 @@ public class AreaMapeada extends _BaseEntity {
     @OneToMany(mappedBy = "areaMapeada", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Localizacao> localizacoes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "areaMapeada")// Nome do atributo na classe Residuo
+    @OneToMany(mappedBy = "areaMapeada", fetch = FetchType.EAGER)// Nome do atributo na classe Residuo
     private List<Residuo> residuos;
 
 }
