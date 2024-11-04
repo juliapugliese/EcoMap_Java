@@ -1,6 +1,5 @@
 package br.com.fiap.ecoMap.controller;
 
-
 import br.com.fiap.ecoMap.dto.ColetaCadastroDto;
 import br.com.fiap.ecoMap.dto.ColetaExibicaoDto;
 import br.com.fiap.ecoMap.service.ColetaService;

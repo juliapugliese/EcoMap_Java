@@ -15,6 +15,7 @@ public record LocalizacaoCadastroDto(
         @NotBlank(message = "As coordenadas são obrigatórias!")
         String coordenadas,
 
+        @NotBlank(message = "O bairro deve ser enviado!")
         String bairro
 ) {
 }

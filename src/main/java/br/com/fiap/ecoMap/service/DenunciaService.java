@@ -40,36 +40,33 @@ public class DenunciaService {
         Denuncia denuncia = new Denuncia();
         BeanUtils.copyProperties(denunciaCadastroDto, denuncia);
 
-        if (denunciaCadastroDto.localizacao() != null) {
-            Localizacao localizacao = new Localizacao();
-            BeanUtils.copyProperties(denunciaCadastroDto.localizacao(), localizacao);
+        Localizacao localizacao = new Localizacao();
+        BeanUtils.copyProperties(denunciaCadastroDto.localizacao(), localizacao);
 
-            Localizacao localizacaoVerificada = localizacaoRepository.findByCoordenadas(localizacao.getCoordenadas())
+        //Ver se localização esta salva no repositorio
+        Localizacao localizacaoVerificada = localizacaoRepository.findByCoordenadas(localizacao.getCoordenadas())
+                .orElseGet(() -> {
+                    return localizacao;
+                });
+
+        if (denunciaCadastroDto.localizacao().bairro() != null) {
+            AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(denunciaCadastroDto.localizacao().bairro())
                     .orElseGet(() -> {
-                        // Se não encontrar, salva a nova localização no repositorio
-                        return localizacao;
+                        // Se não encontrar, cria uma nova área mapeada e salva no repositorio
+                        AreaMapeada novaAreaMapeada = new AreaMapeada();
+                        novaAreaMapeada.setBairro(denunciaCadastroDto.localizacao().bairro());
+                        return areaMapeadaRepository.save(novaAreaMapeada);
                     });
 
-            if (denunciaCadastroDto.localizacao().bairro() != null) {
-                AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(denunciaCadastroDto.localizacao().bairro())
-                        .orElseGet(() -> {
-                            // Se não encontrar, cria uma nova área mapeada
-                            AreaMapeada novaAreaMapeada = new AreaMapeada();
-                            novaAreaMapeada.setBairro(denunciaCadastroDto.localizacao().bairro());
-                            return areaMapeadaRepository.save(novaAreaMapeada);
-                        });
-
-                //Inserindo a área mapeada à localização
-                localizacaoVerificada.setAreaMapeada(areaMapeada);
-            } else {
-                throw new EntityNotFoundException ("Bairro não encontrado.");
-            }
-            // Setar a localização encontrada / criada
-            localizacaoRepository.save(localizacaoVerificada);
-            denuncia.setLocalizacao(localizacaoVerificada);
+            //Inserindo a área mapeada à localização
+            localizacaoVerificada.setAreaMapeada(areaMapeada);
         } else {
-            throw new EntityNotFoundException("Localização não fornecida.");
+            throw new EntityNotFoundException ("Bairro não encontrado.");
         }
+        // Salva a localização encontrada / criada
+        localizacaoRepository.save(localizacaoVerificada);
+        denuncia.setLocalizacao(localizacaoVerificada);
+
 
         // Verifica o denunciante
         if (denunciaCadastroDto.idDenunciante() != null) {

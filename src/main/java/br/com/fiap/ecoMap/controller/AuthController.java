@@ -1,6 +1,5 @@
 package br.com.fiap.ecoMap.controller;
 
-
 import br.com.fiap.ecoMap.config.security.TokenService;
 import br.com.fiap.ecoMap.dto.LoginDto;
 import br.com.fiap.ecoMap.dto.TokenDto;

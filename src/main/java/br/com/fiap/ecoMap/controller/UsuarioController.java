@@ -1,6 +1,5 @@
 package br.com.fiap.ecoMap.controller;
 
-
 import br.com.fiap.ecoMap.dto.UsuarioCadastroDto;
 import br.com.fiap.ecoMap.dto.UsuarioExibicaoDto;
 import br.com.fiap.ecoMap.model.Usuario;

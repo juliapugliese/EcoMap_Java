@@ -1,6 +1,5 @@
 package br.com.fiap.ecoMap.controller;
 
-
 import br.com.fiap.ecoMap.dto.DenunciaCadastroDto;
 import br.com.fiap.ecoMap.dto.DenunciaExibicaoDto;
 import br.com.fiap.ecoMap.service.DenunciaService;
