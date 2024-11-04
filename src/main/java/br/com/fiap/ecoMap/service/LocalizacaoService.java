@@ -25,13 +25,14 @@ public class LocalizacaoService {
 
 
     public LocalizacaoExibicaoDto gravar(LocalizacaoCadastroDto localizacaoCadastroDto) {
-        Localizacao localizacao = new Localizacao();
-        BeanUtils.copyProperties(localizacaoCadastroDto, localizacao);
-
-        Localizacao localizacaoVerificada = localizacaoRepository.findByCoordenadas(localizacaoCadastroDto.coordenadas())
-                .orElseGet(() -> {
-                    return localizacao;
-                });
+        Optional<Localizacao> localizacaExistenteOptional = localizacaoRepository.findByCoordenadas(localizacaoCadastroDto.coordenadas());
+        Localizacao localizacao;
+        if (localizacaExistenteOptional.isPresent()) {
+            localizacao = localizacaExistenteOptional.get();
+        } else {
+            localizacao = new Localizacao();
+            BeanUtils.copyProperties(localizacaoCadastroDto, localizacao);
+        }
 
         if (localizacaoCadastroDto.bairro() != null) {
             AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(localizacaoCadastroDto.bairro())
@@ -42,13 +43,12 @@ public class LocalizacaoService {
                         return areaMapeadaRepository.save(novaAreaMapeada);
                     });
 
-            localizacaoVerificada.setAreaMapeada(areaMapeada);
+            localizacao.setAreaMapeada(areaMapeada);
         } else {
             throw new EntityNotFoundException ("Bairro não encontrado.");
         }
-        // Salva a localização encontrada / criada
-        localizacaoRepository.save(localizacaoVerificada);
-        return new LocalizacaoExibicaoDto(localizacaoVerificada);
+        // Salva e retorna a localização encontrada / criada
+        return new LocalizacaoExibicaoDto(localizacaoRepository.save(localizacao));
     }
 
 
@@ -78,6 +78,7 @@ public class LocalizacaoService {
     public LocalizacaoExibicaoDto buscarPorId(Long id){
         Optional<Localizacao> localizacaoOptional = localizacaoRepository.findById(id);
         if(localizacaoOptional.isPresent()){
+            System.out.println(localizacaoOptional.get());
             return new LocalizacaoExibicaoDto(localizacaoOptional.get());
         }
         else {

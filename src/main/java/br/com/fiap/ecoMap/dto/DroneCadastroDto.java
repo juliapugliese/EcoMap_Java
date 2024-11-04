@@ -4,6 +4,7 @@ import br.com.fiap.ecoMap.model.enums.DroneStatus;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record DroneCadastroDto(
         Long id,
@@ -13,6 +14,9 @@ public record DroneCadastroDto(
 
         DroneStatus status,
 
-        LocalDate dataAquisicao
+        LocalDate dataAquisicao,
+
+        List<Long> idAreas
+
 ) {
 }

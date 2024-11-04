@@ -38,6 +38,7 @@ public class UsuarioService {
                 usuarioRepository.findById(id);
 
         if (usuarioOptional.isPresent()){
+            System.out.println(usuarioOptional.get());
             return new UsuarioExibicaoDto(usuarioOptional.get());
         } else {
             throw new UsuarioNaoEncontradoException("Usuário não existe no banco de dados!");

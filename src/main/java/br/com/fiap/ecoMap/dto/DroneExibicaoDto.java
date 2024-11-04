@@ -10,21 +10,21 @@ public record DroneExibicaoDto(
         Long id,
         String modelo,
         DroneStatus status,
-        LocalDate dataAquisicao,
+        LocalDate dataAquisicao
 
-        List<AreaMapeadaExibicaoDto> areas
+//        List<AreaMapeadaExibicaoDto> areas
 ) {
     public DroneExibicaoDto(Drone drone){
         this(
                 drone.getId(),
                 drone.getModelo(),
                 drone.getStatus(),
-                drone.getDataAquisicao(),
+                drone.getDataAquisicao()
 
-                drone.getAreas() == null || drone.getAreas().isEmpty() ? null :
-                        drone.getAreas().stream()
-                                .map(AreaMapeadaExibicaoDto::new)
-                                .collect(Collectors.toList())
+//                drone.getAreas() == null || drone.getAreas().isEmpty() ? null :
+//                        drone.getAreas().stream()
+//                                .map(AreaMapeadaExibicaoDto::new)
+//                                .collect(Collectors.toList())
         );
     }
 }

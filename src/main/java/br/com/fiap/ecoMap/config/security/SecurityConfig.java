@@ -37,10 +37,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/usuarios").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET,"api/contatos").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/api/contatos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/contatos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/contatos").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.GET,"api/contatos").hasAnyRole("ADMIN", "USER")
+//                        .requestMatchers(HttpMethod.POST, "/api/contatos").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/api/contatos").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE, "/api/contatos").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(
                         verificarToken,

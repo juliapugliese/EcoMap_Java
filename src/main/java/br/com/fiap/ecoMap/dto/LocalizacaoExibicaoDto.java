@@ -7,8 +7,9 @@ public record LocalizacaoExibicaoDto(
         String endereco,
         String cep,
         String coordenadas,
+        Long idArea
 
-        AreaMapeadaExibicaoDto area
+//        AreaMapeadaExibicaoDto area
 ) {
     public LocalizacaoExibicaoDto(Localizacao localizacao){
         this(
@@ -16,8 +17,9 @@ public record LocalizacaoExibicaoDto(
                 localizacao.getEndereco(),
                 localizacao.getCep(),
                 localizacao.getCoordenadas(),
+                localizacao.getAreaMapeada() != null ? localizacao.getAreaMapeada().getId() : null
 
-                localizacao.getAreaMapeada()!= null ? new AreaMapeadaExibicaoDto(localizacao.getAreaMapeada()) : null
+//                localizacao.getAreaMapeada()!= null ? new AreaMapeadaExibicaoDto(localizacao.getAreaMapeada()) : null
         );
     }
 }

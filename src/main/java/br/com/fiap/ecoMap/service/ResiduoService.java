@@ -4,6 +4,7 @@ import br.com.fiap.ecoMap.dto.ResiduoCadastroDto;
 import br.com.fiap.ecoMap.dto.ResiduoExibicaoDto;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Coleta;
+import br.com.fiap.ecoMap.model.Localizacao;
 import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.repository.AreaMapeadaRepository;
 import br.com.fiap.ecoMap.repository.ColetaRepository;
@@ -32,19 +33,16 @@ public class ResiduoService {
         Residuo residuo = new Residuo();
         BeanUtils.copyProperties(residuoCadastroDto, residuo);
 
-        if (residuoCadastroDto.bairro() != null) {
-            AreaMapeada area = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
-                    .orElseThrow(() -> new EntityNotFoundException("Área não encontrada"));
-            residuo.setAreaMapeada(area);
 
-            Coleta coleta = area.getColeta();
-            if (coleta != null) {
-                coleta.setQuantidadeResiduo(coleta.getQuantidadeResiduo() + residuo.getQuantidade());
-                coletaRepository.save(coleta);
-            } else {
-                throw new EntityNotFoundException("Coleta não encontrada");
-            }
-        }
+        AreaMapeada areaMapeada = areaMapeadaRepository.findByBairro(residuoCadastroDto.bairro())
+                .orElseGet(() -> {
+                    // Se não encontrar, cria uma nova área mapeada e salva no repositorio
+                    AreaMapeada novaAreaMapeada = new AreaMapeada();
+                    novaAreaMapeada.setBairro(residuoCadastroDto.bairro());
+                    return areaMapeadaRepository.save(novaAreaMapeada);
+                });
+
+        residuo.setAreaMapeada(areaMapeada);
 
         return new ResiduoExibicaoDto(residuoRepository.save(residuo));
     }
@@ -53,6 +51,7 @@ public class ResiduoService {
     public ResiduoExibicaoDto buscarPorId(Long id){
         Optional<Residuo> residuoOptional = residuoRepository.findById(id);
         if(residuoOptional.isPresent()){
+            System.out.println(residuoOptional.get());
             return new ResiduoExibicaoDto(residuoOptional.get());
         }
         else {

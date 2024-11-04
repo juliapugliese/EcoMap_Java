@@ -9,21 +9,21 @@ public record UsuarioExibicaoDto(
         Long usuarioId,
         String nome,
         String email,
-        UsuarioRole role,
+        UsuarioRole role
 
-        List<DenunciaExibicaoDto> denuncias
+//        List<DenunciaExibicaoDto> denuncias
 ) {
     public UsuarioExibicaoDto(Usuario usuario) {
         this(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                usuario.getRole(),
+                usuario.getRole()
 
-                usuario.getDenuncias() == null || usuario.getDenuncias().isEmpty() ? null :
-                        usuario.getDenuncias().stream()
-                                .map(DenunciaExibicaoDto::new)
-                                .collect(Collectors.toList())
+//                usuario.getDenuncias() == null || usuario.getDenuncias().isEmpty() ? null :
+//                        usuario.getDenuncias().stream()
+//                                .map(DenunciaExibicaoDto::new)
+//                                .collect(Collectors.toList())
         );
     }
 }

@@ -8,20 +8,20 @@ import java.util.stream.Collectors;
 public record ColetaExibicaoDto(
         Long id,
         Long quantidadeResiduo,
-        LocalDate dataColeta,
+        LocalDate dataColeta
 
-        List<AreaMapeadaExibicaoDto> areas
+//        List<AreaMapeadaExibicaoDto> areas
 ) {
     public ColetaExibicaoDto(Coleta coleta){
         this(
                 coleta.getId(),
                 coleta.getQuantidadeResiduo(),
-                coleta.getDataColeta(),
+                coleta.getDataColeta()
 
-                coleta.getAreas() == null || coleta.getAreas().isEmpty() ? null :
-                        coleta.getAreas().stream()
-                                .map(AreaMapeadaExibicaoDto::new)
-                                .collect(Collectors.toList())
+//                coleta.getAreas() == null || coleta.getAreas().isEmpty() ? null :
+//                        coleta.getAreas().stream()
+//                                .map(AreaMapeadaExibicaoDto::new)
+//                                .collect(Collectors.toList())
         );
     }
 }

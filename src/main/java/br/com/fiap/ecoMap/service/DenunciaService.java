@@ -113,6 +113,7 @@ public class DenunciaService {
     public DenunciaExibicaoDto buscarPorId(Long id){
         Optional<Denuncia> denunciaOptional = denunciaRepository.findById(id);
         if(denunciaOptional.isPresent()){
+            System.out.println(denunciaOptional.get());
             return new DenunciaExibicaoDto(denunciaOptional.get());
         }
         else {

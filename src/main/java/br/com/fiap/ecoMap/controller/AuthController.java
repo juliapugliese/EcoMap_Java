@@ -31,7 +31,8 @@ public class AuthController
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginDto loginDto
+    @ResponseStatus(HttpStatus.OK)
+    public TokenDto login(@RequestBody @Valid LoginDto loginDto
     //@RequestBody o objeto vai estar no corpo da requisicao
     ){
         UsernamePasswordAuthenticationToken userNamePassword =
@@ -46,7 +47,7 @@ public class AuthController
 
         String  token = tokenService.gerarToken((Usuario) auth.getPrincipal());
 
-        return ResponseEntity.ok(new TokenDto(token));
+        return new TokenDto(token);
     }
 
     //cadastrando novo usuario

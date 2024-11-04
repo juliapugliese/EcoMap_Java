@@ -27,6 +27,7 @@ public class DroneService {
     public DroneExibicaoDto buscarPorId(Long id){
         Optional<Drone> droneOptional = droneRepository.findById(id);
         if(droneOptional.isPresent()){
+            System.out.println(droneOptional.get());
             return new DroneExibicaoDto(droneOptional.get());
         }
         else {

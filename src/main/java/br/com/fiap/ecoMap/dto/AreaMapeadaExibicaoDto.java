@@ -8,9 +8,12 @@ public record AreaMapeadaExibicaoDto(
         Long id,
         String bairro,
 
-        ColetaExibicaoDto coleta,
-        DroneExibicaoDto drone,
-        List<ResiduoExibicaoDto> residuos
+        Long idDrone,
+        Long idColeta
+
+//        ColetaExibicaoDto coleta,
+//        DroneExibicaoDto drone,
+//        List<ResiduoExibicaoDto> residuos
 
 ) {
     public AreaMapeadaExibicaoDto(AreaMapeada areaMapeada){
@@ -18,12 +21,16 @@ public record AreaMapeadaExibicaoDto(
                 areaMapeada.getId(),
                 areaMapeada.getBairro(),
 
-                areaMapeada.getColeta()!= null ? new ColetaExibicaoDto(areaMapeada.getColeta()) : null,
-                areaMapeada.getDrone()!= null ? new DroneExibicaoDto(areaMapeada.getDrone()) : null,
-                areaMapeada.getResiduos() == null || areaMapeada.getResiduos().isEmpty() ? null :
-                        areaMapeada.getResiduos().stream()
-                        .map(ResiduoExibicaoDto::new)
-                        .collect(Collectors.toList())
+                areaMapeada.getDrone() != null ? areaMapeada.getDrone().getId() : null,
+                areaMapeada.getColeta() != null ? areaMapeada.getColeta().getId() : null
+
+
+//                areaMapeada.getColeta()!= null ? new ColetaExibicaoDto(areaMapeada.getColeta()) : null,
+//                areaMapeada.getDrone()!= null ? new DroneExibicaoDto(areaMapeada.getDrone()) : null,
+//                areaMapeada.getResiduos() == null || areaMapeada.getResiduos().isEmpty() ? null :
+//                        areaMapeada.getResiduos().stream()
+//                        .map(ResiduoExibicaoDto::new)
+//                        .collect(Collectors.toList())
         );
     }
 

@@ -32,6 +32,7 @@ public class ColetaService {
                 coletaRepository.findById(id);
 
         if (coletaOptional.isPresent()){
+            System.out.println(coletaOptional.get());
             return new ColetaExibicaoDto(coletaOptional.get());
         } else {
             throw new UsuarioNaoEncontradoException("Coleta não existe no banco de dados!");

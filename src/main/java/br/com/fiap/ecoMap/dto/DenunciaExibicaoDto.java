@@ -10,8 +10,11 @@ public record DenunciaExibicaoDto(
         LocalDate dataSolicitacao,
         DenunciaStatus status,
 
-        LocalizacaoExibicaoDto localizacao,
-        UsuarioExibicaoDto denunciante
+        Long idDenunciante,
+        Long idLocalizacao
+
+//        LocalizacaoExibicaoDto localizacao,
+//        UsuarioExibicaoDto denunciante
 ) {
     public DenunciaExibicaoDto(Denuncia denuncia){
         this(
@@ -20,8 +23,11 @@ public record DenunciaExibicaoDto(
                 denuncia.getDataSolicitacao(),
                 denuncia.getStatus(),
 
-                denuncia.getLocalizacao()!= null ? new LocalizacaoExibicaoDto(denuncia.getLocalizacao()) : null,
-                denuncia.getDenunciante() != null ? new UsuarioExibicaoDto(denuncia.getDenunciante()) : null
+                denuncia.getDenunciante() != null ? denuncia.getDenunciante().getId() : null,
+                denuncia.getLocalizacao() != null ?denuncia.getLocalizacao().getId() : null
+
+//                denuncia.getLocalizacao()!= null ? new LocalizacaoExibicaoDto(denuncia.getLocalizacao()) : null,
+//                denuncia.getDenunciante() != null ? new UsuarioExibicaoDto(denuncia.getDenunciante()) : null
         );
     }
 }

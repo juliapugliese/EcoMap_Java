@@ -83,6 +83,7 @@ public class AreaMapeadaService {
     public AreaMapeadaExibicaoDto buscarPorId(Long id){
         Optional<AreaMapeada> areaOptional = areaMapeadaRepository.findById(id);
         if(areaOptional.isPresent()){
+            System.out.println(areaOptional.get());
             return new AreaMapeadaExibicaoDto(areaOptional.get());
         }
         else {
