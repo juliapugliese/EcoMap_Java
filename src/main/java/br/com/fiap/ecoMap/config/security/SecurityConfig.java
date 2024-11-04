@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"auth/register").permitAll()
@@ -37,10 +38,35 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/usuarios").hasRole("ADMIN")
 
-//                        .requestMatchers(HttpMethod.GET,"api/contatos").hasAnyRole("ADMIN", "USER")
-//                        .requestMatchers(HttpMethod.POST, "/api/contatos").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.PUT, "/api/contatos").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.DELETE, "/api/contatos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"api/denuncias").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/denuncias").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/denuncias").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/denuncias").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"api/localizacoes").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/localizacoes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/localizacoes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/localizacoes").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"api/areas").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/areas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/areas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/areas").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"api/drones").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/drones").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/drones").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/drones").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"api/coletas").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/coletas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/coletas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/coletas").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET,"api/residuos").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/residuos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/residuos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/residuos").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(
                         verificarToken,
