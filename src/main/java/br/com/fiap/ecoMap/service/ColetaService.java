@@ -97,6 +97,11 @@ public class ColetaService {
             for (Long idArea : coletaCadastroDto.idAreas()) {
                 AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
                         .orElseThrow(() -> new AreaNaoEncontradaException("Área não cadastrada no sistema"));
+                long coletaQtResiduo = areaMapeada.getResiduos().stream().mapToLong(Residuo::getQuantidade).sum();
+
+                coleta.setQuantidadeResiduo(coletaQtResiduo);
+                coletaRepository.save(coleta);
+
                 areaMapeada.setColeta(coleta);
                 areaMapeadaRepository.save(areaMapeada);
             }

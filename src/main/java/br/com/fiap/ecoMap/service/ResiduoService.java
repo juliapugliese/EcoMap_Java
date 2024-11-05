@@ -2,7 +2,6 @@ package br.com.fiap.ecoMap.service;
 
 import br.com.fiap.ecoMap.dto.ResiduoCadastroDto;
 import br.com.fiap.ecoMap.dto.ResiduoExibicaoDto;
-import br.com.fiap.ecoMap.exception.AreaNaoEncontradaException;
 import br.com.fiap.ecoMap.exception.ResiduoNaoEncontradoException;
 import br.com.fiap.ecoMap.model.AreaMapeada;
 import br.com.fiap.ecoMap.model.Coleta;
@@ -10,7 +9,6 @@ import br.com.fiap.ecoMap.model.Residuo;
 import br.com.fiap.ecoMap.repository.AreaMapeadaRepository;
 import br.com.fiap.ecoMap.repository.ColetaRepository;
 import br.com.fiap.ecoMap.repository.ResiduoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -106,7 +104,7 @@ public class ResiduoService {
             Coleta coleta = areaMapeada.getColeta();
             if (coleta != null) {
                 long coletaQtResiduo = coleta.getQuantidadeResiduo() != null ? coleta.getQuantidadeResiduo() : 0;
-                coleta.setQuantidadeResiduo(coletaQtResiduo += residuo.getQuantidade() - residuoOptional.get().getQuantidade());
+                coleta.setQuantidadeResiduo(coletaQtResiduo += residuo.getQuantidade());
                 coletaRepository.save(coleta);
             }
             residuo.setAreaMapeada(areaMapeada);
