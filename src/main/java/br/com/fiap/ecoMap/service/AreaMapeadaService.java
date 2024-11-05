@@ -47,10 +47,10 @@ public class AreaMapeadaService {
             Coleta coleta = coletaRepository.findById(areaCadastroDto.idColeta())
                     .orElseThrow(() -> new ColetaNaoEncontradaException("Coleta não encontrada"));
             areaMapeada.setColeta(coleta);
-
-        }if (areaCadastroDto.idDrone() != null) {
+        }
+        if (areaCadastroDto.idDrone() != null) {
             Drone drone = droneRepository.findById(areaCadastroDto.idDrone())
-                    .orElseThrow(() -> new DroneNaoEncontradoException("Drone não encontrada"));
+                    .orElseThrow(() -> new DroneNaoEncontradoException("Drone não encontrado"));
             areaMapeada.setDrone(drone);
         }
 
@@ -58,27 +58,27 @@ public class AreaMapeadaService {
     }
 
 
-    public AreaMapeadaExibicaoDto atualizar(AreaMapeadaCadastroDto areaCadastroDto){
-        AreaMapeada areaMapeada = new AreaMapeada();
-        BeanUtils.copyProperties(areaCadastroDto, areaMapeada);
+    public AreaMapeadaExibicaoDto atualizar(AreaMapeadaCadastroDto areaCadastroDto) {
+        AreaMapeada areaMapeada = areaMapeadaRepository.findById(areaCadastroDto.id())
+                .orElseThrow(() -> new AreaNaoEncontradaException("Área não encontrada"));
 
-        Optional<AreaMapeada> areaOptional = areaMapeadaRepository.findById(areaMapeada.getId());
-        if(areaOptional.isPresent()){
-            if (areaCadastroDto.idColeta() != null) {
-                Coleta coleta = coletaRepository.findById(areaCadastroDto.idColeta())
-                        .orElseThrow(() -> new ColetaNaoEncontradaException("Coleta não encontrada"));
-                areaMapeada.setColeta(coleta);
-
-            }if (areaCadastroDto.idDrone() != null) {
-                Drone drone = droneRepository.findById(areaCadastroDto.idDrone())
-                        .orElseThrow(() -> new DroneNaoEncontradoException("Drone não encontrada"));
-                areaMapeada.setDrone(drone);
-            }
-            return new AreaMapeadaExibicaoDto(areaMapeadaRepository.save(areaMapeada));
+        if (areaCadastroDto.idColeta() != null) {
+            Coleta coleta = coletaRepository.findById(areaCadastroDto.idColeta())
+                    .orElseThrow(() -> new ColetaNaoEncontradaException("Coleta não encontrada"));
+            areaMapeada.setColeta(coleta);
         }
-        else {
-            throw new EntityNotFoundException("Área não encontrada");        }
+
+        if (areaCadastroDto.idDrone() != null) {
+            Drone drone = droneRepository.findById(areaCadastroDto.idDrone())
+                    .orElseThrow(() -> new DroneNaoEncontradoException("Drone não encontrado"));
+            areaMapeada.setDrone(drone);
+        }
+
+        BeanUtils.copyProperties(areaCadastroDto, areaMapeada, "id"); // Don't overwrite the ID
+
+        return new AreaMapeadaExibicaoDto(areaMapeadaRepository.save(areaMapeada));
     }
+
 
 
     public AreaMapeadaExibicaoDto buscarPorId(Long id){
