@@ -46,6 +46,7 @@ public class ColetaService {
                 AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
                         .orElseThrow(() -> new AreaNaoEncontradaException("Área não cadastrada no sistema"));
                 long coletaQtResiduo = areaMapeada.getResiduos().stream().mapToLong(Residuo::getQuantidade).sum();
+
                 coleta.setQuantidadeResiduo(coletaQtResiduo);
                 coletaRepository.save(coleta);
 
@@ -53,7 +54,7 @@ public class ColetaService {
                 areaMapeadaRepository.save(areaMapeada);
             }
         }
-
+        coletaRepository.save(coleta);
         return new ColetaExibicaoDto(coleta);
     }
 
@@ -86,27 +87,23 @@ public class ColetaService {
         }
     }
 
-    public ColetaExibicaoDto atualizar(ColetaCadastroDto coletaCadastroDto){
-        Coleta coleta = new Coleta();
-        BeanUtils.copyProperties(coletaCadastroDto, coleta);
-        Optional<Coleta> coletaOptional = coletaRepository.findById(coleta.getId());
-        if(coletaOptional.isPresent()){
-            coleta = coletaRepository.save(coleta);
+    public ColetaExibicaoDto atualizar(ColetaCadastroDto coletaCadastroDto) {
+        Coleta coleta = coletaRepository.findById(coletaCadastroDto.id())
+                .orElseThrow(() -> new ColetaNaoEncontradaException("Coleta não encontrada"));
 
-            if (coletaCadastroDto.idAreas() != null && !coletaCadastroDto.idAreas().isEmpty()) {
-                for (Long idArea : coletaCadastroDto.idAreas()) {
-                    AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
-                            .orElseThrow(() -> new AreaNaoEncontradaException("Área não cadastrada no sistema"));
-                    areaMapeada.setColeta(coleta);
-                    areaMapeadaRepository.save(areaMapeada);
-                }
+        BeanUtils.copyProperties(coletaCadastroDto, coleta, "id");  // Exclude "id" from being overwritten
+
+        if (coletaCadastroDto.idAreas() != null && !coletaCadastroDto.idAreas().isEmpty()) {
+            for (Long idArea : coletaCadastroDto.idAreas()) {
+                AreaMapeada areaMapeada = areaMapeadaRepository.findById(idArea)
+                        .orElseThrow(() -> new AreaNaoEncontradaException("Área não cadastrada no sistema"));
+                areaMapeada.setColeta(coleta);
+                areaMapeadaRepository.save(areaMapeada);
             }
+        }
+        coleta = coletaRepository.save(coleta);
 
-            return new ColetaExibicaoDto(coleta);
-        }
-        else {
-            throw new ColetaNaoEncontradaException("Coleta não encontrado");
-        }
+        return new ColetaExibicaoDto(coleta);
     }
 
 
