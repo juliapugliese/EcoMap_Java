@@ -42,6 +42,7 @@ public class UsuarioController {
     public void excluir(@PathVariable Long usuarioId){
         usuarioService.excluir(usuarioId);
     }
+
     @PutMapping("/usuarios")
     @ResponseStatus(HttpStatus.OK)
     public Usuario atualizar(@RequestBody Usuario usuario){
