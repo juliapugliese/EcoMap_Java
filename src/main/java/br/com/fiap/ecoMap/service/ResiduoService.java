@@ -76,6 +76,13 @@ public class ResiduoService {
     public void excluir(Long id){
         Optional<Residuo> residuoOptional = residuoRepository.findById(id);
         if(residuoOptional.isPresent()){
+            Coleta coleta = residuoOptional.get().getAreaMapeada().getColeta();
+            if (coleta != null) {
+                long coletaQtResiduo = coleta.getQuantidadeResiduo() != null ? coleta.getQuantidadeResiduo() : 0;
+                coleta.setQuantidadeResiduo(coletaQtResiduo -= residuoOptional.get().getQuantidade());
+                coletaRepository.save(coleta);
+            }
+
             residuoRepository.delete(residuoOptional.get());
         }
         else {
@@ -99,7 +106,7 @@ public class ResiduoService {
             Coleta coleta = areaMapeada.getColeta();
             if (coleta != null) {
                 long coletaQtResiduo = coleta.getQuantidadeResiduo() != null ? coleta.getQuantidadeResiduo() : 0;
-                coleta.setQuantidadeResiduo(coletaQtResiduo += residuo.getQuantidade());
+                coleta.setQuantidadeResiduo(coletaQtResiduo += residuo.getQuantidade() - residuoOptional.get().getQuantidade());
                 coletaRepository.save(coleta);
             }
             residuo.setAreaMapeada(areaMapeada);
